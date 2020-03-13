@@ -94,7 +94,8 @@ class Page extends Component {
     render() {
         const styles = useStyles;
 
-        return (
+        return (<div>
+            <div><i className="fa fa-spinner fa-spin"></i></div>
             <div style={styles.pageLayout} onClick={(e) => this.writeNote(e)}>
                 {/* <div style={styles.editorSize}>
                     <RichTextEditor
@@ -116,6 +117,7 @@ class Page extends Component {
                         </div>
                     )
                 })}
+            </div>
             </div>
         );
     }
