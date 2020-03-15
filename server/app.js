@@ -1,13 +1,22 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const expressValidator = require('express-validator');
+dotenv.config();
 
 // importing routes
 const userRoutes = require('./routes/user');
 
-dotenv.config();
+
 
 const app = express();
+
+mongoose.connection.on('error', function(err){
+    console.log(`MongoDB connection error: ${err.message}`);
+});
 
 mongoose.connect(
     process.env.MONGO_URI,
@@ -16,12 +25,18 @@ mongoose.connect(
       useCreateIndex: true,
       useFindAndModify: false }
 )
-.then(() => console.log('Connected to MongoDB'));
-
-mongoose.connection.on('error', function(err){
-    console.log(`MongoDB connection error: ${err.message}`);
+.then(() => console.log('Connected to MongoDB'))
+.catch(() => {
+    console.log('Could not connect to MongoDB');
+    process.exit(1);
 });
 
+
+
+app.use(morgan('dev'));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(expressValidator());
 
 
 app.use('/api', userRoutes);
