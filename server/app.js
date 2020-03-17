@@ -9,8 +9,9 @@ dotenv.config();
 
 // importing routes
 const userRoutes = require('./routes/user');
-
-
+const notebookRoutes = require('./routes/notebook');
+const subjectRoutes = require('./routes/subject');
+const pageRoutes = require('./routes/page');
 
 const app = express();
 
@@ -40,6 +41,9 @@ app.use(expressValidator());
 
 
 app.use('/api', userRoutes);
+app.use('/api', notebookRoutes);
+app.use('/api', subjectRoutes);
+app.use('/api', pageRoutes);
 
 const port = process.env.PORT || 8080;
 
