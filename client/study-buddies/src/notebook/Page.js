@@ -1,46 +1,46 @@
 import React, { Component } from 'react';
 import RichTextEditor from 'react-rte';
+import "./Styles.css";
+
+
 
 
 const useStyles = {
     pageLayout: {
         height: '100vh'
     },
-    editorSize: {
-        maxWidth: '95vw',
-        width: 'fit-content',
-        position: 'absolute',
-        top: '300px'
-    },
-    editorSizee: {
-        maxWidth: '95vw',
-        width: 'fit-content',
-        position: 'absolute',
-        // left: '600px'
-        top: '300px'
+    temp: {
+        width: '45vh',
+        marginRight: 'none'
     }
 }
 
-class Page extends Component {
-    // static propTypes = {
-    //     onChange: PropTypes.func
-    // };
+var monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
+const date = new Date();
+const day = date.getDate();
+const month = monthNames[date.getMonth()];
+const year = date.getFullYear();
+
+class Page extends Component {
     state = {
-        value: RichTextEditor.createEmptyValue(),
-        value2: RichTextEditor.createEmptyValue(),
         notes: [],
-        readOnly: false
+        readOnly: false,
+        titleReadOnly: false,
+        date: (month + " " +  day + ", " + year),
+        value: RichTextEditor.createEmptyValue()
     }
 
     onChangeHandler = (value, index) => {
-        let notes = [...this.state.notes]
+        let notes = [...this.state.notes];
         notes[index].value = value;
-        this.setState( {notes: notes} )
+        this.setState( {notes: notes} );
     };
 
     onChange = (value) => {
-        this.setState({value: value})
+        this.setState({value: value});
     }
 
     writeNote = (e) => {
@@ -49,6 +49,7 @@ class Page extends Component {
         let style = {
             maxWidth: '95vw',
             width: 'fit-content',
+            overflow: 'wrap',
             position: 'absolute',
             top: e.clientY,
             left: e.clientX
@@ -59,19 +60,24 @@ class Page extends Component {
             readOnly: false
         }
 
-        let notes = [...this.state.notes]
+        let notes = [...this.state.notes];
 
         let i;
-        
+
         // TODO just keep track of the active one to not change every single value
         // make all other notes read only
         for (i = 0; i < notes.length; i++) {
-            notes[i].readOnly = true
+            notes[i].readOnly = true;
         }
 
-        notes.push(note)
+        this.setState({titleReadOnly: true})
 
-        this.setState( {notes: notes} )
+        // remove any empty string notes
+        notes = notes.filter(e => e.value.toString('markdown') !== RichTextEditor.createValueFromString('', 'html').toString('markdown'));
+
+        notes.push(note);
+
+        this.setState( {notes: notes} );
     }
     
     editNote = (e, index) => {
@@ -81,43 +87,67 @@ class Page extends Component {
         // make all other notes read only
         let i;
         for (i = 0; i < notes.length; i++) {
-            notes[i].readOnly = true
+            notes[i].readOnly = true;
         }
+
+        this.setState({titleReadOnly: true})
 
         notes[index].readOnly = false;
 
         this.setState( {notes: notes} )
 
     }
-    // onClick={(e) => this.handleFoop(e)}
+
+    editTitle = (e) => {
+        e.stopPropagation();
+        this.setState( {titleReadOnly: false} )
+    }
 
     render() {
         const styles = useStyles;
 
-        return (<div>
-            <div><i className="fa fa-spinner fa-spin"></i></div>
-            <div style={styles.pageLayout} onClick={(e) => this.writeNote(e)}>
-                {/* <div style={styles.editorSize}>
-                    <RichTextEditor
-                        readOnly={this.state.readonly}
-                        value={this.state.value}
-                        onChange={this.onChange}
-                    />
-                </div> */}
-                {this.state.notes.map((item, index) => {
-                    return (
-                        <div style={this.state.notes[index].style} onClick={(e) => this.editNote(e, index)} key={index}>
+        return (
+            <div className="page">
+                <div style={styles.pageLayout} onClick={(e) => this.writeNote(e)}>
+                    {/* <div style={styles.editorSize}>
+                        <RichTextEditor
+                            readOnly={this.state.readonly}
+                            value={this.state.value}
+                            onChange={this.onChange}
+                        />
+                    </div> */}
+                    <div>
+                        <div className="pageTitle" onClick={(e) => this.editTitle(e)}>
                             <RichTextEditor
-                                value={this.state.notes[index].value}
-                                index={index}
-                                readOnly={this.state.notes[index].readOnly}
-                                onChange={(e) => this.onChangeHandler(e, index)}
+                                className="titleContent"
+                                placeholder='Title...'
+                                readOnly={this.state.titleReadOnly}
+                                value={this.state.value}
+                                onChange={this.onChange}
                                 autoFocus={true}
                             />
                         </div>
-                    )
-                })}
-            </div>
+                        <div>
+                            <div className="ui label date">
+                                {this.state.date}
+                            </div>
+                        </div>
+                    </div>
+                    {this.state.notes.map((item, index) => {
+                        return (
+                            <div style={this.state.notes[index].style} onClick={(e) => this.editNote(e, index)} key={index}>
+                                <RichTextEditor
+                                    className="notes"
+                                    value={this.state.notes[index].value}
+                                    index={index}
+                                    readOnly={this.state.notes[index].readOnly}
+                                    onChange={(e) => this.onChangeHandler(e, index)}
+                                    autoFocus={true}
+                                />
+                            </div>
+                        )
+                    })}
+                </div>        
             </div>
         );
     }
