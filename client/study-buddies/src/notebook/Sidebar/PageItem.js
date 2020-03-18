@@ -12,7 +12,7 @@ class PageItem extends Component {
                         {...provided.dragHandleProps}
                         ref={provided.innerRef}
                         className="pageItem"
-                        onClick={() => {console.log("nib")}}
+                        onClick={() => this.props.click(this.props.page.id)}
                     >   
                         <p>
                             {this.props.page.title}

@@ -109,6 +109,24 @@ class Sidebar extends Component {
         this.setState({ pages: currPages })
     }
 
+    onSelectSubject = (subjectId) => {
+        // backend call to get pages for subject id here
+        // then set state to correct pages
+        if (subjectId === 'sub1') {
+            let pages = [
+                {
+                    id: 'sub1-page0',
+                    title: 'sub1 page 0'
+                },
+                {
+                    id: 'sub1-page1',
+                    title: 'sub1 page 1'
+                }
+            ]
+            this.setState({pages: pages})
+        }
+    }
+
     render() {
         return (
             <div className="sidebar">
@@ -127,6 +145,7 @@ class Sidebar extends Component {
                     >
                         <SubjectColumn 
                             create={this.onCreateSubject}
+                            click={this.onSelectSubject}
                             key={'subjects'} 
                             subjects={this.state.subjects}
                         />
@@ -137,14 +156,13 @@ class Sidebar extends Component {
                     >
                         <PageColumn
                             create={this.onCreatePage}
+                            click={this.props.setActive}
                             key={'pages'} 
                             pages={this.state.pages}
                         />
                     </DragDropContext>
                 </div>
             </div>
-            
-
         );
     }
 }

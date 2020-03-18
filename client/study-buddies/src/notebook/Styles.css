@@ -2,6 +2,21 @@
     width: 100%;
 }
 
+.pageContainer {
+    height: 100vh;
+}
+
+.emptyPage {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.emptyPageContent {
+    margin-top: 20vh;
+    width: 40vw;
+}
+
 .pageTitle {
     margin: 3em;
     margin-bottom: 0em;

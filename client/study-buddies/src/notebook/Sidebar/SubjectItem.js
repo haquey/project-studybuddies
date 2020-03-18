@@ -12,7 +12,7 @@ class SubjectItem extends Component {
                         {...provided.dragHandleProps}
                         ref={provided.innerRef}
                         className="subjectItem"
-                        onClick={() => {console.log("nib")}}
+                        onClick={() => this.props.click(this.props.subject.id)}
                     >   
                         <p>
                             {this.props.subject.title}
