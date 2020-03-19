@@ -1,0 +1,56 @@
+.navbar {
+    display: flex;
+    height: 8vh;
+    background-color: #63120c;
+    box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
+}
+
+.menu {
+    height: 100%;
+    border: none !important;
+    width: 100%;
+}
+
+.menuItem {
+    height: 100%;
+    width: 7vw;
+    justify-content: center;
+}
+
+.menuIcon {
+    font-size: 2em !important;
+    margin: 0 !important;
+}
+
+.userOptions {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+    width: 11vw;
+    border-left: 0.1vw solid #dcddde;
+}
+
+.dropDown {
+    display: flex;
+    align-items: center;
+}
+
+.dropDownContainer {
+    display: flex !important;
+    align-items: center;
+    margin-top: 0.5vh;
+    height: 100%;
+    color: #dcddde;
+}
+
+.userContainer {
+    margin-left: 1vw;
+    color: #dcddde;
+}
+
+.dropDownMenu {
+    height: fit-content;
+    left: 'auto';
+    right: 0;
+    color: #dcddde;
+}
