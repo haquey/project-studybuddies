@@ -15,7 +15,19 @@ class SubjectColumn extends Component {
                             {...provided.droppableProps}
                             className="itemContainer"
                         >
-                            {this.props.subjects.map((subject, index) => <SubjectItem key={subject.id} click={this.props.click} subject={subject} index={index}/>)}
+                            {
+                                this.props.subjects.map((subject, index) => 
+                                    <SubjectItem
+                                        key={subject.id}
+                                        click={this.props.click}
+                                        subject={subject}
+                                        index={index}
+                                        edit={this.props.edit}
+                                        saveName={this.props.saveName}
+                                        delete={this.props.delete}
+                                    />
+                                )
+                            }
                             {provided.placeholder}
                         </div>
                     )}

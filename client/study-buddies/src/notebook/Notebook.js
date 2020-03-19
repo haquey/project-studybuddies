@@ -9,34 +9,45 @@ import RichTextEditor from 'react-rte';
 class Notebook extends Component {
     state = {
         notes: [],
-        activePage: null
+        activePage: null,
+        activeSubject: null
     }
 
     setActivePage = (pageId) => {
-        // get the page data and set the state in a call here
-        // value it takes in should be get reqest return value
-        // appending value to all notes
-        let notes = this.setNotes([{
-            // style: style,
-            id: Math.random().toString(36).replace(/[^a-z]+/g, ''),
-            yPosition: 300,
-            xPosition: 300,
-            value: RichTextEditor.createEmptyValue(),
-            readOnly: false,
-            text: 'WOWO COOL NOTE'
-        }])
-    
-        let samplePage = {
-            id: 'deez',
-            owner: 'Adnan',
-            notebookId: '000',
-            collaborators: [],
-            title: 'A cool note!',
-            timestamp: 'March 17, 2020',
-            notes: notes,
-            tags: []
+        if (pageId !== null) {
+            // get the page data and set the state in a call here
+            // value it takes in should be get reqest return value
+            // appending value to all notes
+            let notes = this.setNotes([{
+                // style: style,
+                id: Math.random().toString(36).replace(/[^a-z]+/g, ''),
+                yPosition: 400,
+                xPosition: 400,
+                value: RichTextEditor.createEmptyValue(),
+                readOnly: false,
+                text: 'WOWO COOL NOTE'
+            }])
+        
+            let samplePage = {
+                id: 'page0',
+                owner: 'Adnan',
+                subjectId: 'sub1',
+                notebookId: '000',
+                collaborators: [],
+                title: 'A cool note!',
+                timestamp: 'March 17, 2020',
+                notes: notes,
+                tags: []
+            }
+            this.setState({ activePage: samplePage })
+        } else {
+            this.setState({ activePage: null })
         }
-        this.setState({ activePage: samplePage })
+        
+    }
+
+    getActivePage = () => {
+        return this.state.activePage
     }
 
     setNotes = (notes) => {
@@ -51,7 +62,7 @@ class Notebook extends Component {
     render() {
         return (
             <div style={ {display: 'flex'} }>
-                <Sidebar setActive={this.setActivePage}/>
+                <Sidebar setActive={this.setActivePage} getActivePage={this.getActivePage}/>
                 {
                     this.state.activePage != null ?
                         <Page page={this.state.activePage}/>

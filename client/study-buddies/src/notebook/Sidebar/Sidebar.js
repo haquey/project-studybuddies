@@ -25,18 +25,22 @@ class Sidebar extends Component {
         pages: [
             {
                 id: 'page0',
+                subjectId: 'sub1',
                 title: 'page 0'
             },
             {
                 id: 'page1',
+                subjectId: 'sub1',
                 title: 'page 1'
             },
             {
                 id: 'page2',
+                subjectId: 'sub1',
                 title: 'page 2'
             },
             {
                 id: 'page3',
+                subjectId: 'sub3',
                 title: 'page 3'
             },
         ]
@@ -85,7 +89,7 @@ class Sidebar extends Component {
         const movedSubject = this.state.subjects.find(subject => subject.id === draggableId);
         subjects.splice(destination.index, 0, movedSubject);
         
-        this.setState({ subjects: subjects })
+        this.setState({ subjects: subjects });
     };
 
     onCreateSubject = () => {
@@ -94,9 +98,9 @@ class Sidebar extends Component {
             id: Math.random().toString(36).replace(/[^a-z]+/g, ''),
             title: 'untitled'
         }
-        let currSubjects = [...this.state.subjects]
-        currSubjects.push(newSubject)
-        this.setState({ subjects: currSubjects })
+        let currSubjects = [...this.state.subjects];
+        currSubjects.push(newSubject);
+        this.setState({ subjects: currSubjects });
     }
 
     onCreatePage = () => {
@@ -104,9 +108,9 @@ class Sidebar extends Component {
             id: Math.random().toString(36).replace(/[^a-z]+/g, ''),
             title: 'untitled'
         }
-        let currPages = [...this.state.pages]
-        currPages.push(newPage)
-        this.setState({ pages: currPages })
+        let currPages = [...this.state.pages];
+        currPages.push(newPage);
+        this.setState({ pages: currPages });
     }
 
     onSelectSubject = (subjectId) => {
@@ -123,8 +127,56 @@ class Sidebar extends Component {
                     title: 'sub1 page 1'
                 }
             ]
-            this.setState({pages: pages})
+            this.setState({pages: pages});
         }
+    }
+
+    onRenameSubject = (e, subjectId) => {
+        let subjects = [...this.state.subjects];
+        subjects.find(subject => subject.id === subjectId).title = e.target.value;
+        this.setState({subjects: subjects})
+    }
+
+    onSaveSubjectName = (subjectId) => {
+        // push to backend here
+        console.log("saved subj to backend")
+    }
+
+    onRenamePage = (e, pageId) => {
+        let pages = [...this.state.pages];
+        pages.find(page => page.id === pageId).title = e.target.value;
+        this.setState({pages: pages})
+    }
+
+    onSavePageName = (pageId) => {
+        // push to backend here
+        console.log("saved page to backend")
+    }
+
+    onDeleteSubject = (subjectId) => {
+        console.log('del sub')
+        const activePage = this.props.getActivePage();
+        // check if this subject was the active subject
+        if (activePage.subjectId === subjectId) {
+            this.props.setActive(null)
+        }
+
+        let subjects = [...this.state.subjects];
+        let newSubjects = subjects.filter(subject => subject.id !== subjectId);
+        this.setState({subjects: newSubjects})
+    }
+
+    onDeletePage = (pageId) => {
+        console.log('del page')
+        const activePage = this.props.getActivePage();
+        // check if this subject was the active subject
+        if (activePage.id === pageId) {
+            this.props.setActive(null)
+        }
+
+        let pages = [...this.state.pages];
+        let newPages = pages.filter(page => page.id !== pageId);
+        this.setState({pages: newPages})
     }
 
     render() {
@@ -143,11 +195,14 @@ class Sidebar extends Component {
                     <DragDropContext
                         onDragEnd={this.onSubjectDragEnd}
                     >
-                        <SubjectColumn 
+                        <SubjectColumn
+                            edit={this.onRenameSubject}
                             create={this.onCreateSubject}
                             click={this.onSelectSubject}
                             key={'subjects'} 
                             subjects={this.state.subjects}
+                            saveName={this.onSaveSubjectName}
+                            delete={this.onDeleteSubject}
                         />
                     </DragDropContext>
                     <div className="divider"></div>
@@ -155,10 +210,13 @@ class Sidebar extends Component {
                         onDragEnd={this.onPageDragEnd}
                     >
                         <PageColumn
+                            edit={this.onRenamePage}
                             create={this.onCreatePage}
                             click={this.props.setActive}
                             key={'pages'} 
                             pages={this.state.pages}
+                            saveName={this.onSavePageName}
+                            delete={this.onDeletePage}
                         />
                     </DragDropContext>
                 </div>

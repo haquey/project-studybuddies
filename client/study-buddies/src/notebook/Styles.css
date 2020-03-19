@@ -75,6 +75,21 @@
     border-radius: 0.5em;
     border-right: none;
     width: 100%;
+    text-align: center;
+}
+
+.subjectEditItem {
+    display: flex;
+    height: 5vh;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    background-color: #dcddde;
+    border: 0.1vh solid #792822;
+    border-radius: 0.5em;
+    border-right: none;
+    width: 100%;
+    text-align: center;
 }
 
 .pageItem {
@@ -88,6 +103,21 @@
     border-left: none;
     border-right: none;
     width: 100%;
+    text-align: center;
+}
+
+.pageEditItem {
+    display: flex;
+    height: 5vh;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    background-color: #dcddde;
+    border: 0.1vh solid #792822;
+    border-left: none;
+    border-right: none;
+    width: 100%;
+    text-align: center;
 }
 
 .subjectColumn {
@@ -197,4 +227,30 @@
 .notebookInput {
     margin-left: auto;
     display: flex;
+}
+
+.contextMenu {
+    background-color: #dcddde;
+    border-radius: 5%;
+}
+
+.contextMenuItem {
+    padding: 1vw;
+    border-bottom: 0.1vh solid lightgray;
+    cursor: pointer;
+}
+
+.contextMenuItem:hover {
+    background-color: lightgray;
+    border-radius: 5%;
+}
+
+.lastContextMenuItem {
+    padding: 1vw;
+    cursor: pointer;
+}
+
+.lastContextMenuItem:hover {
+    background: lightgray;
+    border-radius: 5%;
 }

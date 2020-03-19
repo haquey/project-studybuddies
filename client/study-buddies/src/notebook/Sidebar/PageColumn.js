@@ -15,7 +15,20 @@ class PageColumn extends Component {
                             {...provided.droppableProps}
                             className="itemContainer"
                         >
-                            {this.props.pages.map((page, index) => <PageItem key={page.id} page={page} click={this.props.click} index={index}/>)}
+                            {
+                                this.props.pages.map(
+                                    (page, index) => 
+                                        <PageItem 
+                                            key={page.id}
+                                            page={page}
+                                            click={this.props.click}
+                                            index={index}
+                                            edit={this.props.edit}
+                                            saveName={this.props.saveName}
+                                            delete={this.props.delete}
+                                        />
+                                )
+                            }
                             {provided.placeholder}
                         </div>
                     )}
