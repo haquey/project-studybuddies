@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import "./Notebook/Styles.css";
+import "./notebook/Styles.css";
 import { Card } from 'semantic-ui-react';
 import { Redirect } from 'react-router';
 
@@ -32,7 +32,7 @@ class NotebookSelect extends Component {
 
     render() {
         if (this.state.redirect !== null) {
-            return <Redirect push to="/signin" />;
+            return <Redirect push to="/notebook" />;
         }
 
         let subjects = this.state.notebooks.map((notebook, index) => {
