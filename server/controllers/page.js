@@ -1,4 +1,8 @@
 const Page = require('../models/page');
+// Imports the Google Cloud client library
+const vision = require('@google-cloud/vision');
+// Creates a client
+const client = new vision.ImageAnnotatorClient();
 
 exports.pageById = function(req, res, next, id){
     Page.findById(id, function(err, page){
@@ -68,4 +72,41 @@ exports.remove = function(req, res){
         // del pages as well
         res.json(delpage);
     });
+};
+
+exports.ocrScanPage = function(req, res, next){
+    console.log('req.file', req.file);
+    console.log(req);
+    const fileName = req.file.path;
+    let pageObj = {};
+    pageObj.notes = [];
+    pageObj.ownerId = req.profile._id;
+    pageObj.notebookId = req.body.notebookId;
+    pageObj.subjectId = req.body.subjectId;
+
+    client.documentTextDetection(fileName)
+    .then(data => {
+        const fullTextAnnotation = data[0].fullTextAnnotation;
+        let pArr = fullTextAnnotation.text.split('\n');
+        pageObj.title = pArr[0];
+        let xPos = 400;
+        let yPos = 150;
+
+        for (let i=1; i<pArr.length; i++) {
+            if (pArr[i].length > 3) {
+                pageObj.notes.push({text: pArr[i], xPosition: xPos, yPosition: yPos});
+                yPos += 100;
+            }
+        }
+        let page = new Page(pageObj);
+        page.save(function(err, page){
+            if (err) return res.status(400).json(err);
+            res.json(page);
+        });
+    })
+    .catch(err => {
+        return res.status(400).json(err);
+    });
+    
+    
 };

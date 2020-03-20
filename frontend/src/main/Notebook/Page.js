@@ -45,6 +45,7 @@ class Page extends Component {
         let notes = [...this.state.notes];
         notes[index].value = value
         // // move this statement to when we decide to push
+        console.log(value.toString('markdown'));
         notes[index].text = value.toString('markdown')
         this.setState( {notes: notes} );
     };
