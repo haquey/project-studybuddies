@@ -52,7 +52,10 @@ class Notebook extends Component {
             })
             .then(res => res.json())
             .then(data => {
-                this.setState({activePage: data})
+                let i;
+                this.setState({activePage: data}, function () {
+                    console.log(this.state.activePage)
+                })
             })
             .catch(err => console.log(err));
         } else {
@@ -80,7 +83,7 @@ class Notebook extends Component {
                 <Sidebar notebookId={this.props.location.state.id} setActive={this.setActivePage} getActivePage={this.getActivePage}/>
                 {
                     this.state.activePage != null ?
-                        <Page page={this.state.activePage}/>
+                        <Page page={this.state.activePage} key={this.state.activePage._id}/>
                     : <EmptyPage/>
                 }
             </div>

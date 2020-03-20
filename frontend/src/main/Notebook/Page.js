@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import RichTextEditor from 'react-rte';
 import "./Styles.css";
+import { API } from "../../config";
+
 // import Draggable from 'react-draggable'; // The default
 
 
@@ -22,23 +24,35 @@ const year = date.getFullYear();
 
 
 class Page extends Component {
+    _isMounted = false;
+
     state = {
-        notes: this.props.page.notes,
-        // notes: [{
-        //     id: '0',
-        //     text: 'WOW COOL NOTE',
-        //     yPosition: 100,
-        //     xPosition: 100,
-        //     readOnly: true,
-        //     value: RichTextEditor.createValueFromString('WOW COOL NOTE', 'html')
-        // }],
-        readOnly: false,
+        _id: this.props.page._id,
+        user: JSON.parse(localStorage.getItem('jwt')).user,
+        notes: [],
+        readOnly: null,
         titleReadOnly: false,
         date: (month + " " +  day + ", " + year),
-        title: RichTextEditor.createValueFromString(this.props.page.title, 'html'),
-        temp: [{
-            value: 'asd'
-        }]
+        title: RichTextEditor.createValueFromString(this.props.page.title, 'html')
+    }
+
+    componentDidMount() {
+        this._isMounted = true;
+        let notes = [...this.props.page.notes]
+        let i;
+        for (i=0; i < notes.length; i++) {
+            notes[i].value = RichTextEditor.createValueFromString(notes[i].text, 'html')
+        }
+        
+        this.setState({notes: notes})
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    componentDidUpdate(prevProps) {
+        console.log("update with did update")
     }
 
     onChangeHandler = (value, index) => {
@@ -84,7 +98,8 @@ class Page extends Component {
             id: Math.random().toString(36).replace(/[^a-z]+/g, ''),
             yPosition: e.clientY,
             xPosition: e.clientX,
-            value: RichTextEditor.createEmptyValue(),
+            value: RichTextEditor.createValueFromString('', 'html'),
+            text: RichTextEditor.createValueFromString('', 'html').toString('markdown'),
             readOnly: false
         }
 
@@ -102,6 +117,46 @@ class Page extends Component {
         notes = notes.filter(e => e.value.toString('markdown') !== RichTextEditor.createValueFromString('', 'html').toString('markdown'));
         notes.push(note);
         this.setState( {notes: notes} )
+    }
+
+    saveTitle = () => {
+        let value = {
+            title: this.state.title.toString('markdown')
+        }
+    
+        fetch(`${API}/user/${this.state.user._id}/page/${this.state._id}/`, {
+            method: "PATCH",
+            headers: {
+                Accept: 'application/json',
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(value)
+        })
+        .catch(err => console.log(err));
+        
+    }
+
+    saveNote = () => {
+        let notes = this.state.notes.filter(e => e.value.toString('markdown') !== RichTextEditor.createValueFromString('', 'html').toString('markdown'));
+        let noteObj = {
+            notes: notes
+        }
+
+        fetch(`${API}/user/${this.state.user._id}/page/${this.state._id}/`, {
+            method: "PATCH",
+            headers: {
+                Accept: 'application/json',
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(noteObj)
+        })
+        .then(res => res.json())
+        .then(() => {
+            this.setState({titleReadOnly: true})
+        })
+        .catch(err => console.log(err));
     }
 
     editNote = (e, index) => {
@@ -148,6 +203,7 @@ class Page extends Component {
                                 value={this.state.title}
                                 onChange={this.onChange}
                                 autoFocus={true}
+                                onBlur={this.saveTitle}
                             />
                         </div>
                         <div>
@@ -176,6 +232,7 @@ class Page extends Component {
                                     readOnly={item.readOnly}
                                     onChange={(e) => this.onChangeHandler(e, index)}
                                     autoFocus={true}
+                                    onBlur={this.saveNote}
                                 />
                             </div>
                             // <RichTextEditor
