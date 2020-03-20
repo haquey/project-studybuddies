@@ -100,7 +100,6 @@ const Signin = () => {
             {errorAlert()}
             {redirectLogin()}
             {signForm()}
-            {JSON.stringify(values)}
         </Format>
     );
 };

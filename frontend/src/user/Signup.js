@@ -100,7 +100,6 @@ const Signup = () => {
             {errorAlert()}
             {successAlert()}
             {signForm()}
-            {JSON.stringify(values)}
         </Format>
     );
 };
