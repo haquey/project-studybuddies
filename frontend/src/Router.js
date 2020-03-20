@@ -10,6 +10,7 @@ import Notebook from './main/notebook/Notebook';
 const Routes = () => {
     return (
         <BrowserRouter>
+            <NavBar />
             <Switch>
                 <Route path="/" exact component={Home}></Route>
                 <Route path="/signin" exact component={Signin}/>
