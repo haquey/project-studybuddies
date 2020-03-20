@@ -6,7 +6,7 @@ const Home = () => {
     return (
         <Format 
         title="Welcome to StuddyBuddy" 
-        desc="Studybuddy is a collaboartive digital notebook tool." 
+        desc="StudyBuddy is a collaborative digital notebook tool." 
         className="container-fluid">
         </Format>
     );
