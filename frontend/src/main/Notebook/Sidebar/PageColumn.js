@@ -19,7 +19,7 @@ class PageColumn extends Component {
                                 this.props.pages.map(
                                     (page, index) => 
                                         <PageItem 
-                                            key={page.id}
+                                            key={page._id + index}
                                             page={page}
                                             click={this.props.click}
                                             index={index}

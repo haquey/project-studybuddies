@@ -5,15 +5,26 @@ import { Redirect } from 'react-router';
 import { API } from "../config";
 
 class NotebookSelect extends Component {
+    _isMounted = false;
+
     state = {
         redirect: null,
         user: JSON.parse(localStorage.getItem('jwt')).user,
-        notebooks: [],
+        notebooks: [{
+            id: 'asdasd',
+            title: 'nib',
+            ownerId: 'asdasd'
+        }],
         isEditing: null
     }
 
     componentDidMount() {
-        this.getNotebooks()
+        this._isMounted = true;
+        this.getNotebooks();
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     getNotebooks = () => {
@@ -53,6 +64,8 @@ class NotebookSelect extends Component {
             notebooks.push(data);
             this.setState({notebooks: notebooks})
         })
+        .catch(err => console.log(err));
+
     }
 
     editName = (id) => {
@@ -71,16 +84,11 @@ class NotebookSelect extends Component {
             },
             body: JSON.stringify(notebook)
         })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
-        })
+        .catch(err => console.log(err));
     }
 
-    onClick = (title, id) => {
-        // go to correct page for notebook id
-        this.getNotebooks()
-        // this.setState({redirect: '1'})
+    onClick = (id) => {
+        this.setState({redirect: id})
     }
 
     onChangeHandler = (e, index) => {
@@ -91,12 +99,16 @@ class NotebookSelect extends Component {
 
     render() {
         if (this.state.redirect !== null) {
-            return <Redirect push to="/notebook" />;
+            return <Redirect push to={{
+                    pathname: '/notebook/',
+                    state: { id: this.state.redirect }
+                }} 
+            />;
         }
 
         let subjects = this.state.notebooks.map((notebook, index) => {
             return (
-                <Card key={index} style={{width: "100%"}} onClick={this.onClick}>
+                <Card key={index} style={{width: "100%"}} onClick={() => this.onClick(notebook._id)}>
                     <Card.Content>
                         <Card.Header>
                             {

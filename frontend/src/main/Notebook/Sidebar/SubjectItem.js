@@ -21,23 +21,23 @@ class SubjectItem extends Component {
 
     render() {
         return (
-            <Draggable draggableId={this.props.subject.id} index={this.props.index}>
+            <Draggable draggableId={this.props.subject._id} index={this.props.index}>
                 {(provided) => (
                     <div>
-                        <ContextMenuTrigger id={this.props.subject.id}>
+                        <ContextMenuTrigger id={this.props.subject._id}>
                             <div>
                                 {
-                                    this.state.isEditing === this.props.subject.id ?
+                                    this.state.isEditing === this.props.subject._id ?
                                         <input
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}
                                             ref={provided.innerRef}
                                             className="subjectEditItem"
-                                            readOnly={this.state.isEditing !== this.props.subject.id}
+                                            readOnly={this.state.isEditing !== this.props.subject._id}
                                             value={this.props.subject.title}
-                                            onChange={(e) => this.props.edit(e, this.props.subject.id)}
+                                            onChange={(e) => this.props.edit(e, this.props.subject._id)}
                                             autoFocus
-                                            onBlur={() => this.setName(this.props.subject.id)}
+                                            onBlur={() => this.setName(this.props.subject._id)}
                                         />
                                     : 
                                         <div
@@ -45,18 +45,18 @@ class SubjectItem extends Component {
                                             {...provided.dragHandleProps}
                                             ref={provided.innerRef}
                                             className="subjectItem"
-                                            onClick={() => this.props.click(this.props.subject.id)}
+                                            onClick={() => this.props.click(this.props.subject._id)}
                                         >
                                             {this.props.subject.title}
                                         </div>
                                 }
                             </div>
                         </ContextMenuTrigger>
-                        <ContextMenu id={this.props.subject.id} className="contextMenu">
-                            <MenuItem className="contextMenuItem" onClick={() => this.onClickEdit(this.props.subject.id)}>
+                        <ContextMenu id={this.props.subject._id} className="contextMenu">
+                            <MenuItem className="contextMenuItem" onClick={() => this.onClickEdit(this.props.subject._id)}>
                                 Rename
                             </MenuItem>
-                            <MenuItem className="contextMenuItem" onClick={() => this.props.delete(this.props.subject.id)}>
+                            <MenuItem className="contextMenuItem" onClick={() => this.props.delete(this.props.subject._id)}>
                                 Delete Subject
                             </MenuItem>
                             {/* <MenuItem divider /> */}
