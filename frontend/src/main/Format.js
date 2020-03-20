@@ -1,5 +1,6 @@
 
 import React from 'react';
+import NavBar from './NavBar';
 
 const Format = ({
     title, 
@@ -8,6 +9,7 @@ const Format = ({
     children
 }) => (
     <div>
+        <NavBar/>
         <div className="jumbotron">
             <h3>{title}</h3>
             <p className="lead">{desc}</p>

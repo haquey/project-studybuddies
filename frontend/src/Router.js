@@ -8,12 +8,11 @@ import NavBar from './main/NavBar';
 const Routes = () => {
     return (
         <BrowserRouter>
-        <NavBar/>
-            <Switch>
-                <Route path="/" exact component={Home}></Route>
-                <Route path="/signin" exact component={Signin}/>
-                <Route path="/signup" exact component={Signup}/>
-            </Switch>
+        <Switch>
+            <Route path="/" exact component={Home}></Route>
+            <Route path="/signin" exact component={Signin}/>
+            <Route path="/signup" exact component={Signup}/>
+        </Switch>
         </BrowserRouter>
     )
 }
