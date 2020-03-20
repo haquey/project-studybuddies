@@ -18,7 +18,7 @@ class SubjectColumn extends Component {
                             {
                                 this.props.subjects.map((subject, index) => 
                                     <SubjectItem
-                                        key={subject.id}
+                                        key={subject._id + index}
                                         click={this.props.click}
                                         subject={subject}
                                         index={index}

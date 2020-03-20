@@ -61,8 +61,8 @@
 }
 
 .selectHeader {
-    /* background-color: #63120c;
-    color: #dcddde; */
+    display: flex;
+    align-items: center;
 }
 
 .notebookAuthor {

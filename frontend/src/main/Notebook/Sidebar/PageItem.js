@@ -21,23 +21,23 @@ class PageItem extends Component {
 
     render() {
         return (
-            <Draggable draggableId={this.props.page.id} index={this.props.index}>
+            <Draggable draggableId={this.props.page._id} index={this.props.index}>
                 {(provided) => (
                     <div>
-                        <ContextMenuTrigger id={this.props.page.id}>
+                        <ContextMenuTrigger id={this.props.page._id}>
                             <div>
                                 {
-                                    this.state.isEditing === this.props.page.id ?
+                                    this.state.isEditing === this.props.page._id ?
                                         <input
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}
                                             ref={provided.innerRef}
                                             className="pageEditItem"
-                                            readOnly={this.state.isEditing !== this.props.page.id}
+                                            readOnly={this.state.isEditing !== this.props.page._id}
                                             value={this.props.page.title}
-                                            onChange={(e) => this.props.edit(e, this.props.page.id)}
+                                            onChange={(e) => this.props.edit(e, this.props.page._id)}
                                             autoFocus
-                                            onBlur={() => this.setName(this.props.page.id)}
+                                            onBlur={() => this.setName(this.props.page._id)}
                                         />
                                     :
                                         <div
@@ -45,18 +45,18 @@ class PageItem extends Component {
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}
                                             ref={provided.innerRef}
-                                            onClick={() => this.props.click(this.props.page.id)}
+                                            onClick={() => this.props.click(this.props.page._id)}
                                         >
                                             {this.props.page.title}
                                         </div>
                                 }
                             </div>
                         </ContextMenuTrigger>
-                        <ContextMenu id={this.props.page.id} className="contextMenu">
-                            <MenuItem className="contextMenuItem" onClick={() => this.onClickEdit(this.props.page.id)}>
+                        <ContextMenu id={this.props.page._id} className="contextMenu">
+                            <MenuItem className="contextMenuItem" onClick={() => this.onClickEdit(this.props.page._id)}>
                                 Rename
                             </MenuItem>
-                            <MenuItem className="contextMenuItem" onClick={() => this.props.delete(this.props.page.id)}>
+                            <MenuItem className="contextMenuItem" onClick={() => this.props.delete(this.props.page._id)}>
                                 Delete Page
                             </MenuItem>
                             {/* <MenuItem divider /> */}
