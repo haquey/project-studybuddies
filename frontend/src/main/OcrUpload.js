@@ -169,7 +169,7 @@ const OcrUpload = () => {
             desc="Upload your handwritten notes to convert them to typed text." 
             className="container-fluid col-md-8 offset-md-2"
         >
-            {errorAlert()}
+            {/* {errorAlert()} */}
             {successAlert()}
             {signForm()}
         </Format>

@@ -32,6 +32,12 @@ const NavBar = ({ history }) => {
             {isAuthenticated() && (
                 <Fragment>
                 <li className="nav-item">
+                    <Link className="nav-link" style={isActive(history, '/notebookselect')} to="/notebookselect">My Notebooks</Link>
+                </li>
+                <li className="nav-item">
+                    <Link className="nav-link" style={isActive(history, '/upload')} to="/upload">Upload</Link>
+                </li>
+                <li className="nav-item">
                     <span 
                         className="nav-link" 
                         style={{cursor: "pointer", color: "#ff7979"}} 
