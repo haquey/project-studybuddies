@@ -5,13 +5,6 @@ import { API } from "../../config";
 
 // import Draggable from 'react-draggable'; // The default
 
-
-const useStyles = {
-    pageLayout: {
-        height: '100vh'
-    }
-}
-
 var monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
@@ -33,7 +26,8 @@ class Page extends Component {
         readOnly: null,
         titleReadOnly: false,
         date: (month + " " +  day + ", " + year),
-        title: RichTextEditor.createValueFromString(this.props.page.title, 'html')
+        title: RichTextEditor.createValueFromString(this.props.page.title, 'html'),
+        init: true
     }
 
     componentDidMount() {
@@ -43,24 +37,28 @@ class Page extends Component {
         for (i=0; i < notes.length; i++) {
             notes[i].value = RichTextEditor.createValueFromString(notes[i].text, 'html')
         }
-        
-        this.setState({notes: notes})
+        // setting all notes to read only on init
+        this.setState({notes: notes}, function () {
+            for (i = 0; i < notes.length; i++) {
+                notes[i].readOnly = true;
+            }
+        })
     }
 
     componentWillUnmount() {
         this._isMounted = false;
     }
 
-    componentDidUpdate(prevProps) {
-        console.log("update with did update")
-    }
+    // componentDidUpdate(prevProps) {
+    //     console.log("update with did update")
+    // }
 
     onChangeHandler = (value, index) => {
         let notes = [...this.state.notes];
         notes[index].value = value
         // // move this statement to when we decide to push
-        console.log(value.toString('markdown'));
-        notes[index].text = value.toString('markdown')
+        // console.log(value.toString('markdown'));
+        notes[index].text = value.toString('html')
         this.setState( {notes: notes} );
     };
 
@@ -69,34 +67,12 @@ class Page extends Component {
         // push title (convert to text) to text here
     }
 
-    // let samplePage = {
-    //     id: 'deez',
-    //     owner: 'Adnan',
-    //     notebookId: '000',
-    //     collaborators: [],
-    //     title: 'A cool note!',
-    //     timestamp: 'March 17, 2020',
-    //     notes: [{
-    //         text: 'WOW COOL NOTE',
-    //         yPosition: 100,
-    //         xPosition: 100,
-    //         readOnly: true
-    //     }],
-    //     tags: []
-    // }
 
     writeNote = (e) => {
         // console.log(e.clientY - e.target.offsetTop) used if we want positions relative to element
-        // console.log(e.clientX - e.target.offsetLeft)
-        // let style = [...noteStyle];
-        // style['top'] = e.clientY;
-        // style['left'] = e.clientX;
 
-        //TODO: add post request here, note is callback
-
+        this.saveNote()
         let note = {
-            // style: style,
-            id: Math.random().toString(36).replace(/[^a-z]+/g, ''),
             yPosition: e.clientY,
             xPosition: e.clientX,
             value: RichTextEditor.createValueFromString('', 'html'),
@@ -124,7 +100,6 @@ class Page extends Component {
         let value = {
             title: this.state.title.toString('markdown')
         }
-    
         fetch(`${API}/user/${this.state.user._id}/page/${this.state._id}/`, {
             method: "PATCH",
             headers: {
@@ -143,7 +118,7 @@ class Page extends Component {
         let noteObj = {
             notes: notes
         }
-
+        
         fetch(`${API}/user/${this.state.user._id}/page/${this.state._id}/`, {
             method: "PATCH",
             headers: {
@@ -176,9 +151,6 @@ class Page extends Component {
 
         this.setState( {notes: notes} )
 
-        console.log(notes)
-        console.log(this.props.page.notes)
-
     }
 
     editTitle = (e) => {
@@ -194,7 +166,7 @@ class Page extends Component {
         // const dragHandlers = {onDragStop: this.onStop};
         return (
             <div className="page">
-                <div className="pageContainer" onClick={(e) => this.writeNote(e)}>
+                <div className="pageContainer" id="container" onClick={(e) => this.writeNote(e)}>
                     <div>
                         <div className="pageTitle" onClick={(e) => this.editTitle(e)}>
                             <RichTextEditor
@@ -233,19 +205,8 @@ class Page extends Component {
                                     readOnly={item.readOnly}
                                     onChange={(e) => this.onChangeHandler(e, index)}
                                     autoFocus={true}
-                                    onBlur={this.saveNote}
                                 />
                             </div>
-                            // <RichTextEditor
-                            //     className="notes"
-                            //     key={index}
-                            //     // value = {this.state.notes[index].value}
-                            //     value = {RichTextEditor.createEmptyValue()}
-                            //     index={index}
-                            //     readOnly={this.state.notes[index].readOnly}
-                            //     onChange={(e) => this.onChangeHandler(e, index)}
-                            //     autoFocus={true}
-                            // />
                         )
                     })}
                 </div>        

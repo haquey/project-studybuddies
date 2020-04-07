@@ -1,6 +1,6 @@
 import React from 'react';
 import "./Styles.css";
-import { Card, Icon } from 'semantic-ui-react'
+import { Card } from 'semantic-ui-react'
 
 
 let emptyPage = () => {

@@ -52,9 +52,8 @@ class Notebook extends Component {
             })
             .then(res => res.json())
             .then(data => {
-                let i;
                 this.setState({activePage: data}, function () {
-                    console.log(this.state.activePage)
+                    // console.log(this.state.activePage)
                 })
             })
             .catch(err => console.log(err));

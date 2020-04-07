@@ -68,7 +68,8 @@ class NotebookSelect extends Component {
 
     }
 
-    editName = (id) => {
+    editName = (e, id) => {
+        e.stopPropagation();
         this.setState({isEditing: id})
     }
 
@@ -122,7 +123,7 @@ class NotebookSelect extends Component {
                             :
                                 <div className="selectHeader">
                                     <p style={{margin: 0}}>{notebook.title}</p>
-                                    <Button style={{marginLeft: "auto"}} onClick={() => this.editName(notebook._id)}>
+                                    <Button style={{marginLeft: "auto"}} onClick={(e) => this.editName(e, notebook._id)}>
                                         <Icon style={{margin: 0}} name='edit'/>
                                     </Button>
                                 </div>
