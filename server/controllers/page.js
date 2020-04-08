@@ -26,6 +26,12 @@ exports.read = function(req, res){
     return res.json(req.page);
 };
 
+exports.readPageRepo = function(req, res){
+    Page.find({}, function(err, pages){
+        return res.json(pages);
+    });
+};
+
 exports.addToNotebook = function(req, res){
     console.log("HERHEHREH");
     let page = req.page;
