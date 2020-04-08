@@ -41,13 +41,12 @@ exports.update = function(req, res){
 
 exports.updateOrder = function(req, res){
     let subject = req.subject;
-    if (subject.order === req.body.order) {
-        res.json(subject);
-    }
+    if (subject.order === req.body.order) return res.json(subject); 
     subject.order = req.body.order;
+    console.log("order to be saved: ", subject.order);
     let notebookId = req.notebook._id;
 
-    Subject.updateMany({ notebookId: notebookId, order: { $gte: subject.order }}, { $inc: { order: 1 } }, function(err, res){
+    Subject.updateMany({ notebookId: notebookId, order: { $gte: subject.order }}, { $inc: { order: 1 } }, function(err, docsUpdated){
         if (err) return res.status(400).json(err);
         subject.save(function(err, subject){
             if (err) return res.status(400).json(err);
