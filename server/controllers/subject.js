@@ -39,6 +39,23 @@ exports.update = function(req, res){
     });
 };
 
+exports.updateOrder = function(req, res){
+    let subject = req.subject;
+    if (subject.order === req.body.order) {
+        res.json(subject);
+    }
+    subject.order = req.body.order;
+    let notebookId = req.notebook._id;
+
+    Subject.updateMany({ notebookId: notebookId, order: { $gte: subject.order }}, { $inc: { order: 1 } }, function(err, res){
+        if (err) return res.status(400).json(err);
+        subject.save(function(err, subject){
+            if (err) return res.status(400).json(err);
+            res.json(subject);
+        });
+    });
+};
+
 exports.remove = function(req, res){
     let subject = req.subject;
     subject.remove(function(err, delSubject){
