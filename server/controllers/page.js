@@ -32,8 +32,24 @@ exports.readPageRepo = function(req, res){
     });
 };
 
+exports.updatePageOrder = function(req, res){
+    let page = req.page;
+
+    if (page.order === req.body.order) return res.json(page);
+
+    page.order = req.body.order;
+    let notebookId = req.notebook._id;
+
+    Page.updateMany({ notebookId: notebookId, order: { $gte: page.order }}, { $inc: { order: 1 } }, function(err, docsUpdated){
+        if (err) return res.status(400).json(err);
+        page.save(function(err, page){
+            if (err) return res.status(400).json(err);
+            res.json(page);
+        });
+    });
+};
+
 exports.addToNotebook = function(req, res){
-    console.log("HERHEHREH");
     let page = req.page;
     let pageObj = {};
     pageObj.ownerId = req.profile._id;
