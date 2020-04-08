@@ -12,6 +12,10 @@ const subjectSchema = new mongoose.Schema({
         trim: true,
         required: true,
         maxlength: 32
+    },
+    order: {
+        type: Number,
+        required: true
     }
 }, 
 { timestamps: true });

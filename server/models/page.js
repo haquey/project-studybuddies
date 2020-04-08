@@ -34,7 +34,10 @@ const pageSchema = new mongoose.Schema({
         xPosition: { type: Number, required: true },
         yPosition: { type: Number, required: true },
         isEditing: { type: Boolean, required: true, default: false }
-    }]
+    }],
+    order: {
+        type: Number
+    }
 }, 
 { timestamps: true });
 
