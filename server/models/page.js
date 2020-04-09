@@ -17,11 +17,15 @@ const pageSchema = new mongoose.Schema({
         type: ObjectId,
         ref: "Subject"
     },
-    title: {
+    rawTitle: {
         type: String,
         trim: true,
         required: true,
         maxlength: 128
+    },
+    richTitle: {
+        type: String,
+        required: true
     },
     collaborators: {
         type: [String]
@@ -30,8 +34,6 @@ const pageSchema = new mongoose.Schema({
         type: [String],
     },
     notes: [{
-        richTitle: { type: String },
-        rawTitle: { type: String },
         richText: { type: String, required: true },
         rawText: { type: String, required: true },
         xPosition: { type: Number, required: true },
