@@ -30,7 +30,9 @@ const pageSchema = new mongoose.Schema({
         type: [String],
     },
     notes: [{
-        text: { type: String, required: true },
+        title: { type: String },
+        richText: { type: String, required: true },
+        rawText: { type: String, required: true },
         xPosition: { type: Number, required: true },
         yPosition: { type: Number, required: true },
         isEditing: { type: Boolean, required: true, default: false }
