@@ -30,7 +30,8 @@ const pageSchema = new mongoose.Schema({
         type: [String],
     },
     notes: [{
-        title: { type: String },
+        richTitle: { type: String },
+        rawTitle: { type: String },
         richText: { type: String, required: true },
         rawText: { type: String, required: true },
         xPosition: { type: Number, required: true },
