@@ -289,7 +289,7 @@ class Sidebar extends Component {
 
     render() {
         return (
-            <div className="sidebar">
+            <div className="sidebar compMargin">
                 <div className="sidebarHeader">
                     <Header as='h2' inverted color='grey' className="header">My Notebook</Header>
                     <div className="notebookInput">

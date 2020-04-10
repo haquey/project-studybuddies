@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "./notebook/Styles.css";
-import { Card, Button, Icon, Input, Tab, Modal, Header, Dropdown } from 'semantic-ui-react';
+import { Card, Button, Icon, Input, Tab, Modal, Header, Dropdown, Form } from 'semantic-ui-react';
 import { API } from "../config";
 
 
@@ -14,7 +14,10 @@ class Search extends Component {
         addedPageTitle: '',
         notebooks: [],
         noteBookDropdown: [],
-        selectedPage: {}
+        selectedNotebook: null,
+        selectedSubject: null,
+        selectedPage: {},
+        searchQuery: null
     }
 
     componentDidMount() {
@@ -35,7 +38,7 @@ class Search extends Component {
             let i;
             let dropdown = [];
             for (i=0; i < data.length; i++) {
-                dropdown.push({key: data[i]._id, text: data[i].title, value: data[i].title})
+                dropdown.push({key: data[i]._id, text: data[i].title, value: data[i]._id})
             }
             this.setState({notebooks: data, noteBookDropdown: dropdown})
         })
@@ -57,25 +60,17 @@ class Search extends Component {
         .catch(err => console.log(err));
     }
 
-    onAddPage = (page) => {
+    setAddedPage = (page) => {
         this.setState({addingPage: true, selectedPage: page, addedPageTitle: page.rawTitle})
     }
 
     handleClose = () => {
-        this.setState({addingPage: false, selectedPage: {}})
+        this.setState({addingPage: false, selectedPage: {}, selectedNotebook: null})
     }
 
     editName = (e, id) => {
         e.stopPropagation();
         this.setState({isEditing: id})
-    }
-
-    setName = (notebook) => {
-        console.log("asd")
-    }
-
-    onClick = (id) => {
-        this.setState({redirect: id})
     }
 
     onChangeHandler = (e) => {
@@ -84,10 +79,61 @@ class Search extends Component {
         });
     }
 
+    onAddPage = () => {
+        // console.log(this.state.selectedNotebook)
+        console.log(this.state.notebooks.find(notebook => notebook._id === this.state.selectedNotebook));
+        // const newPage = {
+        //     ownerId: this.state.user._id,
+        //     notebookId: this.state.selectedNotebook,
+        //     subjectId: this.state.activeSubject,
+        //     rawTitle: 'untitled',
+        //     richTitle: 'untitled',
+        //     order: this.state.pages.length // default last
+        // }
+
+        // fetch(`${API}/user/${this.state.user._id}/page/create`, {
+        //     method: "POST",
+        //     headers: {
+        //         Accept: 'application/json',
+        //         'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify(newPage)
+        // })
+        // .then(res => res.json())
+        // .then(data => {
+        //     let currPages = [...this.state.pages];
+        //     currPages.push(data);
+        //     this.setState({ pages: currPages });
+        // })
+        // .catch(err => console.log(err));
+    }
+
+    selectNotebook = (e, { value }) => {
+        // get all associated subjects for the selected notebook
+        this.setState({selectedNotebook: value}, function () {
+            fetch(`${API}/user/${this.state.user._id}/notebook/${this.state.selectedNotebook}/subject/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                data.sort((a, b) => a.order - b.order);
+                this.setState({subjects: data})
+            })
+            .catch(err => console.log(err));
+        })
+    }
+
+    // handleChange = (e, { value }) => this.setState({ value })
+
     render() {
         let pages = this.state.pages.map((page, index) => {
             return (
-                <Card key={index} className="addPageDisplay" onClick={() => this.onAddPage(page)}>
+                <Card key={index} className="addPageDisplay">
                     <Card.Content>
                         <Card.Header>
                             {page.rawTitle}
@@ -96,7 +142,7 @@ class Search extends Component {
                         <Card.Description style={{marginLeft: "1vw"}} content={"There should be tags here"} />
                     </Card.Content>
                     <div>
-                        <Button className="noMargin" onClick={() => console.log(this.state.searchValue)}>
+                        <Button className="noMargin" onClick={() => this.setAddedPage(page)}>
                             <Icon className="noMargin" name='cloud upload'/>
                         </Button>
                     </div> 
@@ -141,13 +187,16 @@ class Search extends Component {
                                     Choose the Notebook you want to add this page to
                                 </p>
                                 <div>
-                                    <Dropdown
+                                    <Form.Dropdown
                                         className="notebookDropdown"
-                                        placeholder='Select Notebook'
                                         fluid
                                         search
+                                        required
                                         selection
                                         options={this.state.noteBookDropdown}
+                                        value={this.state.selectedNotebook}
+                                        placeholder='Select Notebook'
+                                        onChange={this.selectNotebook}
                                     />
                                 </div>
                             </div>
@@ -160,10 +209,10 @@ class Search extends Component {
                         </div>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button>
+                        <Button onClick={this.handleClose}>
                             Cancel
                         </Button>
-                        <Button color='green'>
+                        <Button disabled={this.state.selectedNotebook === null} onClick={this.onAddPage} color='green'>
                             <Icon name='checkmark' /> Yes
                         </Button>
                     </Modal.Actions>
