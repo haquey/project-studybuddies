@@ -34,7 +34,7 @@ class PageColumn extends Component {
                     )}
                 </Droppable>
                 <div className="addSubject">
-                    <Button onClick={this.props.create} className="add">+ Add Page</Button>
+                    <Button onClick={this.props.create} className="add">+ Page</Button>
                 </div>
             </div>
         )
