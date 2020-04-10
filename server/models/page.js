@@ -45,7 +45,7 @@ const pageSchema = new mongoose.Schema({
     },
     public: {
         type: Boolean,
-        required: true
+        required: true, default: true
     }
 }, 
 { timestamps: true });
