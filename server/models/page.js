@@ -42,6 +42,10 @@ const pageSchema = new mongoose.Schema({
     }],
     order: {
         type: Number
+    },
+    public: {
+        type: Boolean,
+        required: true
     }
 }, 
 { timestamps: true });
