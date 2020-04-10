@@ -18,7 +18,7 @@ exports.searchPages = function(req, res){
     let pagenum = req.query.page ? parseInt(req.query.page) : 0;
     let searchQuery = req.query.key;
     console.log('searchquery: ', searchQuery);
-    Page.find({$text: {$search: searchQuery}})
+    Page.find({public: true, $text: {$search: searchQuery}})
         .sort({createdAt:-1})
         .skip(limit*pagenum)
         .limit(limit)
