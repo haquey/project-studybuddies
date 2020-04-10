@@ -55,4 +55,6 @@ const pageSchema = new mongoose.Schema({
 }, 
 { timestamps: true });
 
+pageSchema.index({rawTitle: 'text', 'notes.rawText': 'text', tags: 'text'});
+
 module.exports = mongoose.model('Page', pageSchema);

@@ -12,6 +12,7 @@ exports.create = function(req, res){
     console.log('req.body', req.body);
     req.body.notebookId = req.params.notebookId;
     let subject = new Subject(req.body);
+    console.log('subject: ', subject);
     subject.save(function(err, subject){
         if (err) return res.status(400).json(err);
         res.json(subject);
