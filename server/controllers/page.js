@@ -12,6 +12,22 @@ exports.pageById = function(req, res, next, id){
     });
 };
 
+exports.searchPages = function(req, res){
+    if (!req.query.key) return res.json([]);
+    let limit = req.query.limit ? parseInt(req.query.limit) : 10;
+    let pagenum = req.query.page ? parseInt(req.query.page) : 0;
+    let searchQuery = req.query.key;
+    console.log('searchquery: ', searchQuery);
+    Page.find({$text: {$search: searchQuery}})
+        .sort({createdAt:-1})
+        .skip(limit*pagenum)
+        .limit(limit)
+        .exec(function(err, pages){
+            if (err) return res.status(400).json(err);
+            return res.json(pages);
+    });
+};
+
 exports.create = function(req, res){
     console.log('req.body', req.body);
     req.body.ownerId = req.profile._id;
