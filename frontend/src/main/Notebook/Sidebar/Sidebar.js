@@ -147,6 +147,7 @@ class Sidebar extends Component {
     onCreatePage = () => {
         const newPage = {
             ownerId: this.state.user._id,
+            ownerName: this.state.user.username,
             notebookId: this.props.notebookId,
             subjectId: this.state.activeSubject,
             rawTitle: 'untitled',

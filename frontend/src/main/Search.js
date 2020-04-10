@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import "./notebook/Styles.css";
+import "./externalStyles.css"
 import { Card, Button, Icon, Input, Tab, Modal, Header, Dropdown, Form } from 'semantic-ui-react';
 import { API } from "../config";
 
@@ -9,6 +10,7 @@ class Search extends Component {
     state = {
         user: JSON.parse(localStorage.getItem('jwt')).user,
         searchValue: '',
+        storedSearch: '',
         pages: [],
         addingPage: false,
         addedPageTitle: '',
@@ -17,11 +19,13 @@ class Search extends Component {
         selectedNotebook: null,
         selectedSubject: null,
         selectedPage: {},
-        searchQuery: null
+        subjects: null,
+        searched: false,
+        pageNum: 0,
+        nextResults: [],
     }
 
     componentDidMount() {
-        this.getPages();
         this.getNotebooks();
     }
 
@@ -45,27 +49,12 @@ class Search extends Component {
         .catch(err => console.log(err));
     }
 
-    getPages = () => {
-        fetch(`${API}/user/${this.state.user._id}/page`, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
-                "Content-Type": "application/json"
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            this.setState({pages: data})
-        })
-        .catch(err => console.log(err));
-    }
-
     setAddedPage = (page) => {
         this.setState({addingPage: true, selectedPage: page, addedPageTitle: page.rawTitle})
     }
 
     handleClose = () => {
-        this.setState({addingPage: false, selectedPage: {}, selectedNotebook: null})
+        this.setState({addingPage: false, selectedPage: {}, selectedNotebook: null, selectedSubject: null})
     }
 
     editName = (e, id) => {
@@ -80,33 +69,44 @@ class Search extends Component {
     }
 
     onAddPage = () => {
-        // console.log(this.state.selectedNotebook)
-        console.log(this.state.notebooks.find(notebook => notebook._id === this.state.selectedNotebook));
-        // const newPage = {
-        //     ownerId: this.state.user._id,
-        //     notebookId: this.state.selectedNotebook,
-        //     subjectId: this.state.activeSubject,
-        //     rawTitle: 'untitled',
-        //     richTitle: 'untitled',
-        //     order: this.state.pages.length // default last
-        // }
+        // get pages of selected subject
+        fetch(`${API}/user/${this.state.user._id}/notebook/${this.state.selectedNotebook}/subject/${this.state.selectedSubject}/page`, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            const newPage = {
+                ownerId: this.state.user._id,
+                ownerName: this.state.user.username,
+                notebookId: this.state.selectedNotebook,
+                subjectId: this.state.selectedSubject,
+                rawTitle: this.state.addedPageTitle,
+                richTitle: this.state.addedPageTitle,
+                notes: this.state.selectedPage.notes,
+                order: data.length // default last
+            }
 
-        // fetch(`${API}/user/${this.state.user._id}/page/create`, {
-        //     method: "POST",
-        //     headers: {
-        //         Accept: 'application/json',
-        //         'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify(newPage)
-        // })
-        // .then(res => res.json())
-        // .then(data => {
-        //     let currPages = [...this.state.pages];
-        //     currPages.push(data);
-        //     this.setState({ pages: currPages });
-        // })
-        // .catch(err => console.log(err));
+            fetch(`${API}/user/${this.state.user._id}/page/create`, {
+                method: "POST",
+                headers: {
+                    Accept: 'application/json',
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(newPage)
+            })
+            .then(
+                this.handleClose()
+            )
+            .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
+        // err checking
+        // console.log(this.state.notebooks.find(notebook => notebook._id === this.state.selectedNotebook));
     }
 
     selectNotebook = (e, { value }) => {
@@ -121,11 +121,69 @@ class Search extends Component {
             })
             .then(res => res.json())
             .then(data => {
+                console.log(data)
                 data.sort((a, b) => a.order - b.order);
-                this.setState({subjects: data})
+                this.setState({subjects: data, x: true})
             })
             .catch(err => console.log(err));
         })
+    }
+
+    selectSubject = (e, { value }) => {
+        this.setState({selectedSubject: value})
+    }
+
+    searchPages = () => {
+        let searchVal = encodeURIComponent(this.state.searchValue.trim())
+        this.search(searchVal)
+    }
+
+    search = (searchVal) => {
+        this.setState({storedSearch: searchVal}, function() {
+            fetch(`${API}/user/${this.state.user._id}/search/page?key=${this.state.storedSearch}&&page=${this.state.pageNum}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                this.setState({searched: true, pages: data}, function () {
+                    fetch(`${API}/user/${this.state.user._id}/search/page?key=${this.state.storedSearch}&&page=${(this.state.pageNum + 1)}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        this.setState({nextResults: data.length})
+                    })
+                })
+            })
+            .catch(err => console.log(err));
+        })
+    }
+
+    // enter press on input search
+    onKeyPress = (e) => {
+        if (e.keyCode == 13){
+            this.searchPages()
+        }
+    }
+
+    nextPage = (direction) => {
+        if (direction) {
+            this.setState({pageNum: (this.state.pageNum + 1)}, function () {
+                this.search(this.state.storedSearch)
+            })
+        } else {
+            this.setState({pageNum: (this.state.pageNum - 1)}, function () {
+                this.search(this.state.storedSearch)
+            })
+        }
     }
 
     // handleChange = (e, { value }) => this.setState({ value })
@@ -134,11 +192,13 @@ class Search extends Component {
         let pages = this.state.pages.map((page, index) => {
             return (
                 <Card key={index} className="addPageDisplay">
-                    <Card.Content>
+                    <Card.Content className="pageCard">
                         <Card.Header>
-                            {page.rawTitle}
+                            <div className="long">
+                                {page.rawTitle}
+                            </div>
                         </Card.Header>
-                        <Card.Meta className="notebookAuthor" content={"Adnan Shahid"} />
+                        <Card.Meta className="notebookAuthor" content={page.ownerName} />
                         <Card.Description style={{marginLeft: "1vw"}} content={"There should be tags here"} />
                     </Card.Content>
                     <div>
@@ -150,32 +210,63 @@ class Search extends Component {
             );
         });
 
-        let panes = [
-            {
-              menuItem: 'Results by Tag',
-              render: () => <Tab.Pane loading={false}>{pages}</Tab.Pane>,
-            },
-            {
-                menuItem: 'Results by Content',
-                render: () => <Tab.Pane loading={false}>{pages}</Tab.Pane>,
-            }
-        ]
-
         return (
             <div>
                 <div className="notebookSelect">
                     <div className="notebookSelectContainer">
                         <div style={{display: 'flex'}}>
-                            <Input size='massive' className="publicSearch" placeholder='Search public pages...' value={this.state.searchValue} onChange={this.onChangeHandler}/>
-                            <Button className="noMargin" onClick={() => console.log(this.state.searchValue)}>
+                            <Input onKeyDown={this.onKeyPress} size='massive' className="publicSearch" placeholder='Search public pages...' value={this.state.searchValue} onChange={this.onChangeHandler}/>
+                            <Button type="submit" className="noMargin" onClick={this.searchPages}>
                                 <Icon className="noMargin" name='search'/>
                             </Button>
                         </div>
-                        <Card style={{width: '100%'}}>
-                            <Card.Content>
-                                <Tab panes={panes} />
-                            </Card.Content>
-                        </Card>
+                        {
+                            this.state.searched ?
+                                <Card style={{width: '100%'}}>
+                                    {
+                                        this.state.pages.length === 0 ?
+                                            <Card className="noSearch">
+                                                <Card.Content className="center column">
+                                                    <Card.Header className="center column">
+                                                        <div>No Results Found</div>
+                                                        <div>Please Try Another Search</div>
+                                                    </Card.Header>
+                                                </Card.Content>
+                                            </Card>
+                                        :
+                                            <Card.Content>
+                                                {pages}
+                                                <div className="center">
+                                                    {
+                                                        this.state.pageNum !== 0 ?
+                                                            <div onClick={() => this.nextPage(false)} className="arrowMargin pageNav">
+                                                                <Icon name="chevron left"/>
+                                                            </div>
+                                                        : null
+                                                    }
+                                                    {
+                                                        this.state.nextResults !== 0 ?
+                                                            <div onClick={() => this.nextPage(true)} className="pageNav">
+                                                                <Icon name="chevron right"/>
+                                                            </div>
+                                                        : null
+                                                    }
+                                                    
+                                                </div>
+                                            </Card.Content>
+                                    }
+                                </Card>
+                            :   
+                                <Card className="noSearch">
+                                    <Card.Content className="center column">
+                                        <Card.Header className="center column">
+                                            <div>Nothing's been searched yet!</div>
+                                            <div>Use the search above</div>
+                                        </Card.Header>
+                                    </Card.Content>
+                                </Card>
+                        }
+                        
                     </div>
                 </div>
                 <Modal className="addPageModal" open={this.state.addingPage} onClose={this.handleClose} closeIcon>
@@ -200,6 +291,42 @@ class Search extends Component {
                                     />
                                 </div>
                             </div>
+                            {
+                                this.state.subjects === null ?
+                                    null
+                                :
+                                    this.state.subjects.length === 0 ?
+                                        <div className="addedTitle">
+                                            <p>
+                                                There are no subjects in this notebook, please choose another
+                                            </p>
+                                        </div>
+                                    : 
+                                        <div className="addedTitle">
+                                            <p>
+                                                Choose the Subject you want to add this page to
+                                            </p>
+                                            <div>
+                                                <Form.Dropdown
+                                                    className="notebookDropdown"
+                                                    fluid
+                                                    search
+                                                    required
+                                                    selection
+                                                    options={this.state.subjects.map(subject => {
+                                                        return {
+                                                            key: subject._id,
+                                                            text: subject.title,
+                                                            value: subject._id
+                                                        }
+                                                    })}
+                                                    value={this.state.selectedSubject}
+                                                    placeholder='Select Subject'
+                                                    onChange={this.selectSubject}
+                                                />
+                                            </div>
+                                        </div>
+                            }
                             <div className="addedTitle">
                                 <p>
                                     Update or keep the current page title
@@ -212,7 +339,7 @@ class Search extends Component {
                         <Button onClick={this.handleClose}>
                             Cancel
                         </Button>
-                        <Button disabled={this.state.selectedNotebook === null} onClick={this.onAddPage} color='green'>
+                        <Button disabled={this.state.selectedSubject === null || this.state.selectedSubject.length === 0} onClick={this.onAddPage} color='green'>
                             <Icon name='checkmark' /> Yes
                         </Button>
                     </Modal.Actions>

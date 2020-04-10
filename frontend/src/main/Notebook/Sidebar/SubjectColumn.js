@@ -33,7 +33,7 @@ class SubjectColumn extends Component {
                     )}
                 </Droppable>
                 <div className="addSubject">
-                    <Button onClick={this.props.create} className="add">+ Add Subject</Button>
+                    <Button onClick={this.props.create} className="add">+ Subject</Button>
                 </div>
             </div>
         )

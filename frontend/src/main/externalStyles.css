@@ -2,3 +2,40 @@
     background-color: #040406;
     color: #dcddde;
 }
+
+.pageCard {
+    width: 10vw !important;
+}
+
+.long {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.center {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.column {
+    flex-direction: column;
+}
+
+.noSearch {
+    height: 20vh;
+    width: 100% !important;
+}
+
+.arrowMargin {
+    margin-right: 2vw;
+}
+
+.pageNav:hover {
+    cursor: pointer;
+}
+
+.pageNav:active {
+    color: #A8A8A8 !important;
+}
