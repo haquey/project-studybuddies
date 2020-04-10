@@ -306,6 +306,7 @@
     margin-left: 25vw !important;
     height: auto;
     margin-top: 25vh !important;
+    width: 50vw !important;
 }
 
 .addedTitle {
@@ -314,7 +315,7 @@
 }
 
 .addPageContainers {
-    width: 50vw;
+    min-width: 20vw;
 }
 
 .notebookDropdown.Menu {

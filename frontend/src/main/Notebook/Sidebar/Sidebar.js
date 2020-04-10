@@ -288,6 +288,32 @@ class Sidebar extends Component {
         .catch(err => console.log(err));
     }
 
+    setPublic = (page) => {
+        // change from pub to priv and vice versa
+        page.public = !page.public
+        fetch(`${API}/user/${this.state.user._id}/page/${page._id}`, {
+            method: "PATCH",
+            headers: {
+                Accept: 'application/json',
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(page)
+        })
+        .then(res => res.json())
+        .then(data => {
+            let pages = [...this.state.pages];
+            let i;
+            for (i = 0; i < pages.length; i++) {
+                if (pages[i]._id == page._id) {
+                    pages[i].public = page.public
+                }
+            }
+            this.setState({pages: pages})
+        })
+        .catch(err => console.log(err));
+    }
+
     render() {
         return (
             <div className="sidebar compMargin">
@@ -326,6 +352,7 @@ class Sidebar extends Component {
                             pages={this.state.pages}
                             saveName={this.onSavePageName}
                             delete={this.onDeletePage}
+                            setPublic={this.setPublic}
                         />
                     </DragDropContext>
                 </div>

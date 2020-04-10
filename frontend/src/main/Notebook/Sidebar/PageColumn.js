@@ -26,6 +26,7 @@ class PageColumn extends Component {
                                             edit={this.props.edit}
                                             saveName={this.props.saveName}
                                             delete={this.props.delete}
+                                            setPublic={this.props.setPublic}
                                         />
                                 )
                             }

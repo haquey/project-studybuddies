@@ -186,6 +186,12 @@ class Search extends Component {
         }
     }
 
+    nameChangeHandler = (e) => {
+        this.setState({
+            addedPageTitle: e.target.value
+        });
+    }
+
     // handleChange = (e, { value }) => this.setState({ value })
 
     render() {
@@ -215,7 +221,13 @@ class Search extends Component {
                 <div className="notebookSelect">
                     <div className="notebookSelectContainer">
                         <div style={{display: 'flex'}}>
-                            <Input onKeyDown={this.onKeyPress} size='massive' className="publicSearch" placeholder='Search public pages...' value={this.state.searchValue} onChange={this.onChangeHandler}/>
+                            <Input 
+                                onKeyDown={this.onKeyPress}
+                                size='massive' className="publicSearch"
+                                placeholder='Search public pages...'
+                                value={this.state.searchValue}
+                                onChange={this.onChangeHandler}
+                            />
                             <Button type="submit" className="noMargin" onClick={this.searchPages}>
                                 <Icon className="noMargin" name='search'/>
                             </Button>
@@ -331,7 +343,12 @@ class Search extends Component {
                                 <p>
                                     Update or keep the current page title
                                 </p>
-                                <Input className="addPageContainers" placeholder={this.state.selectedPage.rawTitle}/>
+                                <Input 
+                                    className="addPageContainers" 
+                                    placeholder={this.state.selectedPage.rawTitle}
+                                    value={this.state.addedPageTitle}
+                                    onChange={this.nameChangeHandler}
+                                />
                             </div>
                         </div>
                     </Modal.Content>

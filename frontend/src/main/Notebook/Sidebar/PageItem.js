@@ -56,6 +56,16 @@ class PageItem extends Component {
                             <MenuItem className="contextMenuItem" onClick={() => this.onClickEdit(this.props.page._id)}>
                                 Rename
                             </MenuItem>
+                            {
+                                this.props.page.public ?
+                                    <MenuItem className="contextMenuItem" onClick={() => this.props.setPublic(this.props.page)}>
+                                        Set Private
+                                    </MenuItem>
+                                :
+                                    <MenuItem className="contextMenuItem" onClick={() => this.props.setPublic(this.props.page)}>
+                                        Set Public
+                                    </MenuItem>
+                            }
                             <MenuItem className="contextMenuItem" onClick={() => this.props.delete(this.props.page._id)}>
                                 Delete Page
                             </MenuItem>
