@@ -36,7 +36,7 @@ class Page extends Component {
         let notes = [...this.props.page.notes]
         let i;
         for (i=0; i < notes.length; i++) {
-            notes[i].value = RichTextEditor.createValueFromString(notes[i].text, 'html')
+            notes[i].value = RichTextEditor.createValueFromString(notes[i].richText, 'html')
         }
         // setting all notes to read only on init
         this.setState({notes: notes}, function () {
@@ -59,7 +59,11 @@ class Page extends Component {
         notes[index].value = value
         // // move this statement to when we decide to push
         // console.log(value.toString('markdown'));
-        notes[index].text = value.toString('html')
+        notes[index].richText = value.toString('html')
+        let wrapper = document.createElement('div');
+        wrapper.innerHTML = notes[index].richText.trim();
+        notes[index].rawText = wrapper.innerText;
+
         this.setState( {notes: notes} );
     };
 
@@ -77,7 +81,8 @@ class Page extends Component {
             yPosition: e.clientY,
             xPosition: e.clientX,
             value: RichTextEditor.createValueFromString('', 'html'),
-            text: RichTextEditor.createValueFromString('', 'html').toString('markdown'),
+            richText: RichTextEditor.createValueFromString('', 'html').toString('html'),
+            rawText: RichTextEditor.createValueFromString('', 'html').toString('html'),
             readOnly: false
         }
 
@@ -92,7 +97,7 @@ class Page extends Component {
         }
 
         // remove any empty string notes
-        notes = notes.filter(e => e.value.toString('markdown') !== RichTextEditor.createValueFromString('', 'html').toString('markdown'));
+        notes = notes.filter(e => e.rawText !== "");
         notes.push(note);
         this.setState( {notes: notes} )
     }
