@@ -8,6 +8,7 @@ import NotebookSelect from './main/NotebookSelect';
 import Notebook from './main/notebook/Notebook';
 import { isAuthenticated } from './auth';
 import OcrUpload from './main/OcrUpload';
+import Search from './main/Search';
 
 const Routes = () => {
     return (
@@ -22,6 +23,7 @@ const Routes = () => {
                         <Route path="/notebookselect" exact component={NotebookSelect}/>
                         <Route path="/notebook" exact component={Notebook}/>
                         <Route path="/upload" exact component={OcrUpload}/>
+                        <Route path="/search" exact component={Search}/>
                     </Fragment>
                 )}
                 

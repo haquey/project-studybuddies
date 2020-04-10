@@ -34,7 +34,7 @@ class PageItem extends Component {
                                             ref={provided.innerRef}
                                             className="pageEditItem"
                                             readOnly={this.state.isEditing !== this.props.page._id}
-                                            value={this.props.page.title}
+                                            value={this.props.page.rawTitle}
                                             onChange={(e) => this.props.edit(e, this.props.page._id)}
                                             autoFocus
                                             onBlur={() => this.setName(this.props.page._id)}
@@ -47,7 +47,7 @@ class PageItem extends Component {
                                             ref={provided.innerRef}
                                             onClick={() => this.props.click(this.props.page._id)}
                                         >
-                                            {this.props.page.title}
+                                            {this.props.page.rawTitle}
                                         </div>
                                 }
                             </div>

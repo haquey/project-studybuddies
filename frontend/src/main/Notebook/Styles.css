@@ -30,6 +30,11 @@
     padding: 2vh;
 }
 
+.publicSearch {
+    width: 100%;
+
+}
+
 .card {
     margin-top: 1vh;
     margin-bottom: 1vh;
@@ -280,4 +285,33 @@
 .lastContextMenuItem:hover {
     background: lightgray;
     border-radius: 5%;
+}
+
+.noMargin {
+    margin: 0 !important;
+}
+
+.addPageDisplay {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+}
+
+.addPageModal {
+    margin-left: 25vw !important;
+    height: auto;
+    margin-top: 25vh !important;
+}
+
+.addedTitle {
+    margin-top: 5vh;
+    margin-bottom: 2vh;
+}
+
+.addPageContainers {
+    width: 50vw;
+}
+
+.notebookDropdown.Menu {
+    max-height: 5vh !important;
 }

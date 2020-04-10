@@ -19,30 +19,6 @@ class Notebook extends Component {
 
     setActivePage = (pageId) => {
         if (pageId !== null) {
-            // get the page data and set the state in a call here
-            // value it takes in should be get reqest return value
-            // appending value to all notes
-            // let notes = this.setNotes([{
-            //     // style: style,
-            //     id: Math.random().toString(36).replace(/[^a-z]+/g, ''),
-            //     yPosition: 400,
-            //     xPosition: 400,
-            //     value: RichTextEditor.createEmptyValue(),
-            //     readOnly: false,
-            //     text: 'WOWO COOL NOTE'
-            // }])
-            // let samplePage = {
-            //     id: 'page0',
-            //     owner: 'Adnan',
-            //     subjectId: 'sub1',
-            //     notebookId: '000',
-            //     collaborators: [],
-            //     title: 'A cool note!',
-            //     timestamp: 'March 17, 2020',
-            //     notes: notes,
-            //     tags: []
-            // }
-            // this.setState({ activePage: samplePage })
             fetch(`${API}/user/${this.state.user._id}/page/${pageId}`, {
                 method: 'GET',
                 headers: {
@@ -71,7 +47,7 @@ class Notebook extends Component {
         // creating RTE values from their string representations
         let i;
         for (i=0; i < notes.length; i++) {
-            notes[i].value = RichTextEditor.createValueFromString(notes[i].text, 'html')
+            notes[i].value = RichTextEditor.createValueFromString(notes[i].richText, 'html')
         }
         return notes;
     }

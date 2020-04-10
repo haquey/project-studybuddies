@@ -26,7 +26,8 @@ class Page extends Component {
         readOnly: null,
         titleReadOnly: false,
         date: (month + " " +  day + ", " + year),
-        title: RichTextEditor.createValueFromString(this.props.page.title, 'html'),
+        richTitle: RichTextEditor.createValueFromString(this.props.page.richTitle, 'html'),
+        rawTitle: this.props.page.rawTitle,
         init: true
     }
 
@@ -63,7 +64,7 @@ class Page extends Component {
     };
 
     onChange = (value) => {
-        this.setState({title: value});
+        this.setState({richTitle: value});
         // push title (convert to text) to text here
     }
 
@@ -97,20 +98,29 @@ class Page extends Component {
     }
 
     saveTitle = () => {
-        let value = {
-            title: this.state.title.toString('markdown')
-        }
-        fetch(`${API}/user/${this.state.user._id}/page/${this.state._id}/`, {
-            method: "PATCH",
-            headers: {
-                Accept: 'application/json',
-                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(value)
+        let richTitle = this.state.richTitle.toString('html');
+        // converting html string to raw string
+        let wrapper= document.createElement('div');
+        wrapper.innerHTML = richTitle.trim();
+        let rawTitle = wrapper.innerText;
+
+        // save and send updated title for both formats
+        this.setState({rawTitle: rawTitle}, function () {
+            let value = {
+                richTitle: this.state.richTitle.toString('html'),
+                rawTitle: this.state.rawTitle
+            }
+            fetch(`${API}/user/${this.state.user._id}/page/${this.state._id}/`, {
+                method: "PATCH",
+                headers: {
+                    Accept: 'application/json',
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(value)
+            })
+            .catch(err => console.log(err));
         })
-        .catch(err => console.log(err));
-        
     }
 
     saveNote = () => {
@@ -173,7 +183,7 @@ class Page extends Component {
                                 className="titleContent"
                                 placeholder='Title...'
                                 readOnly={this.state.titleReadOnly}
-                                value={this.state.title}
+                                value={this.state.richTitle}
                                 onChange={this.onChange}
                                 autoFocus={true}
                                 onBlur={this.saveTitle}

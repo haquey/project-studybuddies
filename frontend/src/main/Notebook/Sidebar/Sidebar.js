@@ -34,6 +34,7 @@ class Sidebar extends Component {
         })
         .then(res => res.json())
         .then(data => {
+            data.sort((a, b) => a.order - b.order);
             this.setState({subjects: data})
         })
         .catch(err => console.log(err));
@@ -57,8 +58,23 @@ class Sidebar extends Component {
         pages.splice(source.index, 1);
         const movedPage = this.state.pages.find(page => page._id === draggableId);
         pages.splice(destination.index, 0, movedPage);
-        
-        this.setState({ pages: pages })
+        let i;
+        for (i=0; i < pages.length; i++) {
+            pages[i].order = i;
+        }
+        fetch(`${API}/user/${this.state.user._id}/notebook/${this.props.notebookId}/subject/${this.state.activeSubject}/page/${movedPage._id}/order`, {
+            method: "PATCH",
+            headers: {
+                Accept: 'application/json',
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({order: movedPage.order})
+        })
+        .then(
+            this.setState({ pages: pages })
+        )
+        .catch(err => console.log(err));
     };
 
     onSubjectDragEnd = (result) => {
@@ -79,15 +95,35 @@ class Sidebar extends Component {
         subjects.splice(source.index, 1);
         const movedSubject = this.state.subjects.find(subject => subject._id === draggableId);
         subjects.splice(destination.index, 0, movedSubject);
-        
-        this.setState({ subjects: subjects });
+        let i;
+        for (i=0; i < subjects.length; i++) {
+            subjects[i].order = i;
+        }
+
+        fetch(`${API}/user/${this.state.user._id}/notebook/${this.props.notebookId}/subject/${movedSubject._id}/order`, {
+            method: "PATCH",
+            headers: {
+                Accept: 'application/json',
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({order: movedSubject.order})
+        })
+        .then(
+            this.setState({ subjects: subjects })
+        )
+        .catch(err => console.log(err));
+
+        console.log(this.state.pages)
     };
 
     onCreateSubject = () => {
         //TODO
+        
         const newSubject = {
             notebookId: this.props.notebookId,
-            title: 'untitled'
+            title: 'untitled',
+            order: this.state.subjects.length // default last
         }
         
         fetch(`${API}/user/${this.state.user._id}/notebook/${this.props.notebookId}/subject/create`, {
@@ -113,7 +149,9 @@ class Sidebar extends Component {
             ownerId: this.state.user._id,
             notebookId: this.props.notebookId,
             subjectId: this.state.activeSubject,
-            title: 'untitled',
+            rawTitle: 'untitled',
+            richTitle: 'untitled',
+            order: this.state.pages.length // default last
         }
 
         fetch(`${API}/user/${this.state.user._id}/page/create`, {
@@ -146,6 +184,7 @@ class Sidebar extends Component {
         })
         .then(res => res.json())
         .then(data => {
+            data.sort((a, b) => a.order - b.order);
             this.setState({pages: data, activeSubject: subjectId})
         })
         .catch(err => console.log(err));
@@ -175,7 +214,8 @@ class Sidebar extends Component {
 
     onRenamePage = (e, pageId) => {
         let pages = [...this.state.pages];
-        pages.find(page => page._id === pageId).title = e.target.value;
+        pages.find(page => page._id === pageId).richTitle = e.target.value;
+        pages.find(page => page._id === pageId).rawTitle = e.target.value;
         this.setState({pages: pages})
     }
 

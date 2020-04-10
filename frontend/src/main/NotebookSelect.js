@@ -10,11 +10,7 @@ class NotebookSelect extends Component {
     state = {
         redirect: null,
         user: JSON.parse(localStorage.getItem('jwt')).user,
-        notebooks: [{
-            id: 'asdasd',
-            title: 'nib',
-            ownerId: 'asdasd'
-        }],
+        notebooks: [],
         isEditing: null
     }
 
