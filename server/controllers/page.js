@@ -12,6 +12,20 @@ exports.pageById = function(req, res, next, id){
     });
 };
 
+exports.searchNotebookPages = function(req, res){
+    if (!req.query.key) return res.json([]);
+    let searchQuery = req.query.key;
+    let notebookId = req.notebook._id;
+    let subjectId = req.subject._id;
+    
+    Page.find({notebookId: notebookId, subjectId: subjectId, $text: {$search: searchQuery}})
+        .sort({order: 1})
+        .exec(function(err, pages){
+            if (err) return res.status(400).json(err);
+            return res.json(pages);
+    });
+};
+
 exports.searchPages = function(req, res){
     if (!req.query.key) return res.json([]);
     let limit = req.query.limit ? parseInt(req.query.limit) : 10;
