@@ -1,8 +1,8 @@
 const Page = require('../models/page');
-// Imports the Google Cloud client library
 const vision = require('@google-cloud/vision');
-// Creates a client
 const client = new vision.ImageAnnotatorClient();
+const language = require('@google-cloud/language');
+const clientNlp = new language.LanguageServiceClient();
 
 exports.pageById = function(req, res, next, id){
     Page.findById(id, function(err, page){
@@ -26,6 +26,42 @@ exports.searchPages = function(req, res){
             if (err) return res.status(400).json(err);
             return res.json(pages);
     });
+};
+
+exports.generateTags = function(req, res){
+    let page = req.page;
+    let text = '';
+    let tags = [];
+
+    page.notes.forEach(note => {
+        text += note.rawText + ' ';
+    });
+
+    // Prepares a document, representing the provided text
+    console.log(text);
+
+    if (text.split(' ').length <= 20) return res.json([]);
+
+    const document = {
+        language: "EN",
+        content: text,
+        type: 'PLAIN_TEXT',
+    };
+
+    clientNlp.classifyText({document: document, encodingType: "UTF8"}).then(classification => {
+        console.log(classification[0].categories);
+        classification[0].categories.forEach(category => {
+            console.log(category.name);
+            tags.push(category.name);
+        });
+        page.tags = tags;
+        page.save(function(err, page){
+            if (err) return res.status(400).json(err);
+            res.json(tags);
+        });
+    })
+    .catch(err => res.json(err));
+
 };
 
 exports.create = function(req, res){

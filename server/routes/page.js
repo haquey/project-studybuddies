@@ -8,7 +8,9 @@ const upload = multer({ dest: path.join(__dirname, 'uploads') });
 const { isSignedIn, isAuthenticated, userById } = require('../controllers/user');
 const { notebookById } = require('../controllers/notebook');
 const { subjectById } = require('../controllers/subject');
-const { create, remove, pageById, read, update, readPageListBySubjectId, addToNotebook, ocrScanPage, readPageRepo, updatePageOrder, searchPages } = require('../controllers/page');
+const { create, remove, pageById, read, update, readPageListBySubjectId, 
+        addToNotebook, ocrScanPage, readPageRepo, updatePageOrder, 
+        searchPages, generateTags } = require('../controllers/page');
 
 router.post('/user/:userId/page/create', isSignedIn, isAuthenticated, create);
 router.get('/user/:userId/page/:pageId', isSignedIn, isAuthenticated, read);
@@ -17,6 +19,8 @@ router.patch('/user/:userId/notebook/:notebookId/subject/:subjectId/page/:pageId
 router.get('/user/:userId/notebook/:notebookId/subject/:subjectId/page', isSignedIn, isAuthenticated, readPageListBySubjectId);
 router.delete('/user/:userId/page/:pageId', isSignedIn, isAuthenticated, remove);
 router.patch('/user/:userId/page/:pageId', isSignedIn, isAuthenticated, update);
+
+router.post('/user/:userId/page/:pageId/nlptags', isSignedIn, isAuthenticated, generateTags);
 
 
 router.post('/user/:userId/page/ocr', isSignedIn, isAuthenticated, upload.single('file'), ocrScanPage);
