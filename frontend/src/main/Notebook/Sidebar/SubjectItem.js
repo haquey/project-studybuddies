@@ -23,7 +23,7 @@ class SubjectItem extends Component {
         return (
             <Draggable draggableId={this.props.subject._id} index={this.props.index}>
                 {(provided) => (
-                    <div>
+                    <div className="long">
                         <ContextMenuTrigger id={this.props.subject._id}>
                             <div>
                                 {
@@ -44,7 +44,7 @@ class SubjectItem extends Component {
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}
                                             ref={provided.innerRef}
-                                            className="subjectItem"
+                                            className="subjectItem sidebarItem"
                                             onClick={() => this.props.click(this.props.subject._id)}
                                         >
                                             {this.props.subject.title}
@@ -59,10 +59,6 @@ class SubjectItem extends Component {
                             <MenuItem className="contextMenuItem" onClick={() => this.props.delete(this.props.subject._id)}>
                                 Delete Subject
                             </MenuItem>
-                            {/* <MenuItem divider /> */}
-                            {/* <MenuItem className="lastContextMenuItem" style={ {borderBottom: 'none'} }data={{foo: 'bar'}}>
-                                Add New Subject
-                            </MenuItem> */}
                         </ContextMenu>
                     </div>
                 )}
