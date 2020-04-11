@@ -41,7 +41,7 @@ class PageItem extends Component {
                                         />
                                     :
                                         <div
-                                            className="pageItem"
+                                            className="pageItem sidebarItem"
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}
                                             ref={provided.innerRef}

@@ -141,6 +141,7 @@
     border-right: none;
     width: 100%;
     text-align: center;
+    max-width: 9.6vw;
 }
 
 .pageEditItem {
@@ -177,7 +178,7 @@
     height: 100%;
     background-color: white;
     opacity: 40%;
-    width: 0.1vw;
+    padding: 0.1em;
 }
 
 .addSubject {
@@ -320,4 +321,19 @@
 
 .notebookDropdown.Menu {
     max-height: 5vh !important;
+}
+
+.long {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebarItem {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    justify-content: center;
+    padding-top: 1.3vh;
 }
