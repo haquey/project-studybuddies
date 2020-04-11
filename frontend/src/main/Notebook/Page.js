@@ -47,6 +47,16 @@ class Page extends Component {
     }
 
     componentWillUnmount() {
+        fetch(`${API}/user/${this.state.user._id}/page/${this.state._id}/nlptags`, {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
+                "Content-Type": "application/json"
+            },
+        })
+        .catch(err => console.log(err));
+        // /user/:userId/page/:pageId/nlptags
         this._isMounted = false;
     }
 

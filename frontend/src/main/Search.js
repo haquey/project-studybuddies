@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import "./notebook/Styles.css";
-import "./externalStyles.css"
+import "./externalStyles.css";
+import Tags from './Tags';
 import { Card, Button, Icon, Input, Tab, Modal, Header, Dropdown, Form } from 'semantic-ui-react';
 import { API } from "../config";
 
@@ -121,7 +122,6 @@ class Search extends Component {
             })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 data.sort((a, b) => a.order - b.order);
                 this.setState({subjects: data, x: true})
             })
@@ -205,7 +205,9 @@ class Search extends Component {
                             </div>
                         </Card.Header>
                         <Card.Meta className="notebookAuthor" content={page.ownerName} />
-                        <Card.Description style={{marginLeft: "1vw"}} content={"There should be tags here"} />
+                        <Card.Description style={{marginLeft: "1vw"}}>
+                            <Tags key={page._id} tags={page.tags}/>
+                        </Card.Description>
                     </Card.Content>
                     <div>
                         <Button className="noMargin" onClick={() => this.setAddedPage(page)}>

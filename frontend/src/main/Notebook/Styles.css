@@ -172,6 +172,8 @@
 
 .itemContainer {
     width: 100%;
+    overflow: auto;
+    max-height: 87.5vh;
 }
 
 .divider {
