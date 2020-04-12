@@ -216,16 +216,23 @@
 }
 
 .header {
+    display: flex;
+    align-items: center !important;
+    margin: 0 !important;
+    margin-left: 1vw !important;
+}
+
+.showNotebookHeader {
     /* display: flex; */
     align-items: center !important;
     /* margin: 0 !important; */
     margin-left: 1vw !important;
     display: block;
-    margin-top: 0.3vh !important;
-    width: 19vw;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    margin-top: 0.5vh !important;
+    width: 19vw !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
 .addNotebook {

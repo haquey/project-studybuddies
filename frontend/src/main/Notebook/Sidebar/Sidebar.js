@@ -318,7 +318,7 @@ class Sidebar extends Component {
         return (
             <div className="sidebar compMargin">
                 <div className="sidebarHeader">
-                    <Header as='h2' inverted color='grey' className="header">{this.props.notebookName}</Header>
+                    <Header as='h2' inverted color='grey' className="showNotebookHeader">{this.props.notebookName}</Header>
                 </div>
                 <div className="sidebarContent">
                     <DragDropContext
