@@ -137,9 +137,10 @@ class NotebookSelect extends Component {
                 <div className="notebookSelectContainer">
                     <div className="selectHeader">
                         <p style={{margin: 0, fontSize: "1.6rem"}}>Add or Select a Notebook!</p>
-                        <Button style={{marginLeft: "auto"}} onClick={this.onAddNotebook}>
-                            <Icon style={{margin: 0}} name='plus'/>
-                        </Button>
+                        <button style={{marginLeft: "auto"}} onClick={this.onAddNotebook}>
+                            +
+                            {/* <Icon style={{margin: 0}} name='plus'/> */}
+                        </button>
                     </div>
                     {subjects}
                 </div>
