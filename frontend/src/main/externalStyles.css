@@ -39,3 +39,9 @@
 .pageNav:active {
     color: #A8A8A8 !important;
 }
+
+.tagList {
+    display: flex;
+    white-space: nowrap;
+    overflow: hidden;
+}

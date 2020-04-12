@@ -14,7 +14,29 @@ class Notebook extends Component {
         notes: [],
         user: JSON.parse(localStorage.getItem('jwt')).user,
         activePage: null,
-        activeSubject: null
+        activeSubject: null,
+        notebookName: 'My Notebook'
+    }
+
+    componentDidMount() {
+        this.getNotebook();
+    }
+
+    getNotebook = () => {
+        fetch(`${API}/user/${this.state.user._id}/notebook/${this.props.location.state.id}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).token,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            this.setState({notebookName: data.title}, function () {
+                // console.log(this.state.activePage)
+            })
+        })
+        .catch(err => console.log(err));  
     }
 
     setActivePage = (pageId) => {
@@ -55,7 +77,7 @@ class Notebook extends Component {
     render() {
         return (
             <div style={ {display: 'flex'} }>
-                <Sidebar notebookId={this.props.location.state.id} setActive={this.setActivePage} getActivePage={this.getActivePage}/>
+                <Sidebar notebookId={this.props.location.state.id} notebookName={this.state.notebookName} setActive={this.setActivePage} getActivePage={this.getActivePage}/>
                 {
                     this.state.activePage != null ?
                         <Page page={this.state.activePage} key={this.state.activePage._id}/>

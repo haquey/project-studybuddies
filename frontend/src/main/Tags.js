@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Label } from 'semantic-ui-react'
+import { Label } from 'semantic-ui-react';
+import "./externalStyles.css";
 
 class Tags extends Component {
     _isMounted = false;
@@ -31,7 +32,7 @@ class Tags extends Component {
         });
 
         return (
-            <div style={ {display: 'flex'} }>
+            <div className="tagList">
                 <Label.Group tag>
                     {tagList}
                 </Label.Group>

@@ -318,13 +318,7 @@ class Sidebar extends Component {
         return (
             <div className="sidebar compMargin">
                 <div className="sidebarHeader">
-                    <Header as='h2' inverted color='grey' className="header">My Notebook</Header>
-                    <div className="notebookInput">
-                        <div className="searchNotebook">
-                            <Icon className="searchIcon" name='search' />
-                        </div>
-                        <div className="addNotebook">+</div>
-                    </div>
+                    <Header as='h2' inverted color='grey' className="header">{this.props.notebookName}</Header>
                 </div>
                 <div className="sidebarContent">
                     <DragDropContext
@@ -341,20 +335,26 @@ class Sidebar extends Component {
                         />
                     </DragDropContext>
                     <div className="divider"></div>
-                    <DragDropContext
-                        onDragEnd={this.onPageDragEnd}
-                    >
-                        <PageColumn
-                            edit={this.onRenamePage}
-                            create={this.onCreatePage}
-                            click={this.props.setActive}
-                            key={'pages'} 
-                            pages={this.state.pages}
-                            saveName={this.onSavePageName}
-                            delete={this.onDeletePage}
-                            setPublic={this.setPublic}
-                        />
-                    </DragDropContext>
+                    {
+                        this.state.activeSubject !== null ?
+                            <DragDropContext
+                                onDragEnd={this.onPageDragEnd}
+                            >
+                                <PageColumn
+                                    edit={this.onRenamePage}
+                                    create={this.onCreatePage}
+                                    click={this.props.setActive}
+                                    key={'pages'} 
+                                    pages={this.state.pages}
+                                    saveName={this.onSavePageName}
+                                    delete={this.onDeletePage}
+                                    setPublic={this.setPublic}
+                                />
+                            </DragDropContext>
+                        :
+                            null
+                    }
+                    
                 </div>
             </div>
         );

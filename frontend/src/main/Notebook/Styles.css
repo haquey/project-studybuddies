@@ -181,6 +181,7 @@
     background-color: white;
     opacity: 40%;
     padding: 0.1em;
+    width: 0.1em;
 }
 
 .addSubject {
@@ -215,10 +216,16 @@
 }
 
 .header {
-    display: flex;
+    /* display: flex; */
     align-items: center !important;
-    margin: 0 !important;
+    /* margin: 0 !important; */
     margin-left: 1vw !important;
+    display: block;
+    margin-top: 0.3vh !important;
+    width: 19vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .addNotebook {
