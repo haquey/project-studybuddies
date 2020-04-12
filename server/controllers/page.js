@@ -169,6 +169,7 @@ exports.ocrScanPage = function(req, res, next){
     let pageObj = {};
     pageObj.notes = [];
     pageObj.ownerId = req.profile._id;
+    pageObj.ownerName = req.profile.username;
     pageObj.notebookId = req.body.notebookId;
     pageObj.subjectId = req.body.subjectId;
 
@@ -176,13 +177,14 @@ exports.ocrScanPage = function(req, res, next){
     .then(data => {
         const fullTextAnnotation = data[0].fullTextAnnotation;
         let pArr = fullTextAnnotation.text.split('\n');
-        pageObj.title = pArr[0];
-        let xPos = 400;
-        let yPos = 150;
+        pageObj.rawTitle = pArr[0];
+        pageObj.richTitle = pArr[0];
+        let xPos = 300;
+        let yPos = 225;
 
         for (let i=1; i<pArr.length; i++) {
             if (pArr[i].length > 3) {
-                pageObj.notes.push({text: pArr[i], xPosition: xPos, yPosition: yPos});
+                pageObj.notes.push({rawText: pArr[i], richText: pArr[i], xPosition: xPos, yPosition: yPos});
                 yPos += 100;
             }
         }
