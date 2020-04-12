@@ -14,21 +14,11 @@ const isActive = (history, path) => {
 
 const NavBar = ({ history }) => {
     return (
-        <div>
-        <ul className="nav nav-tabs mainNavbar">
+        <div class="row mx-auto">
+        <ul className="nav nav-tabs mainNavbar col-md-10">
             <li className="nav-item">
                 <Link className="nav-link" style={isActive(history, '/')} to="/">Home</Link>
             </li>
-            {!isAuthenticated() && (
-                <Fragment>
-                <li className="nav-item">
-                    <Link className="nav-link" style={isActive(history, '/signin')} to="/signin">Log In</Link>
-                </li>
-                <li className="nav-item">
-                    <Link className="nav-link" style={isActive(history, '/signup')} to="/signup">Sign Up</Link>
-                </li>
-                </Fragment>
-            )}
 
             {isAuthenticated() && (
                 <Fragment>
@@ -41,6 +31,22 @@ const NavBar = ({ history }) => {
                 <li className="nav-item">
                     <Link className="nav-link" style={isActive(history, '/upload')} to="/upload">Upload</Link>
                 </li>
+                </Fragment>
+            )}
+        </ul>
+        <ul class="nav nav-tabs mainNavbar col-md-2 justify-content-end">
+            {!isAuthenticated() && (
+                <Fragment>
+                <li className="nav-item">
+                    <Link className="nav-link" style={isActive(history, '/signin')} to="/signin">Log In</Link>
+                </li>
+                <li className="nav-item">
+                    <Link className="nav-link" style={isActive(history, '/signup')} to="/signup">Sign Up</Link>
+                </li>
+                </Fragment>
+            )}
+            {isAuthenticated() && (
+                <Fragment>
                 <li className="nav-item">
                     <span 
                         className="nav-link" 
@@ -56,6 +62,7 @@ const NavBar = ({ history }) => {
                 </li>
                 </Fragment>
             )}
+
         </ul>
     </div>
     )
