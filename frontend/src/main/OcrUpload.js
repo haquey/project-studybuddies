@@ -35,12 +35,13 @@ const OcrUpload = () => {
         })
         .then(res => res.json())
         .then(data => {
-            console.log("fetched notebooks", data);
-            setValues({...values, notebooks: data, notebook: data[0]._id});
+            let setNotebook = '';
+            if (data.length > 0) setNotebook = data[0]._id;
+            setValues({...values, notebooks: data, notebook: setNotebook});
         })
         .catch(err => {
             console.log(err);
-            setValues({...values, error: "An error has occured while creating page. " + err.message});
+            setValues({...values, error: "An error has occured while fetching notebooks. " + err.message});
         });
     }
 
