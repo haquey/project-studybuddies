@@ -135,6 +135,15 @@ class NotebookSelect extends Component {
         return (
             <div className="notebookSelect">
                 <div className="notebookSelectContainer">
+                    <div className="selectHeader">
+                        <p style={{margin: 0, fontSize: "1.6rem"}}>Add or Select a Notebook!</p>
+                        <Button style={{marginLeft: "auto"}} onClick={this.onAddNotebook}>
+                            <Icon style={{margin: 0}} name='plus'/>
+                        </Button>
+                    </div>
+                    {subjects}
+                </div>
+                {/* <div className="notebookSelectContainer">
                     <Card style={{width: '100%'}}>
                         <Card.Content>
                             <Card.Header>
@@ -148,7 +157,7 @@ class NotebookSelect extends Component {
                                 {subjects}
                         </Card.Content>
                     </Card>
-                </div>
+                </div> */}
             </div>
         )
     }
