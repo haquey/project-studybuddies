@@ -9,6 +9,7 @@ import Notebook from './main/notebook/Notebook';
 import { isAuthenticated } from './auth';
 import OcrUpload from './main/OcrUpload';
 import Search from './main/Search';
+import Credits from './main/Credits';
 
 const Routes = () => {
     return (
@@ -18,6 +19,7 @@ const Routes = () => {
                 <Route path="/" exact component={Home}></Route>
                 <Route path="/signin" exact component={Signin}/>
                 <Route path="/signup" exact component={Signup}/>
+                <Route path="/credits" exact component={Credits}/>
                 {isAuthenticated() && (
                     <Fragment>
                         <Route path="/notebookselect" exact component={NotebookSelect}/>
