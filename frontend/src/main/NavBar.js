@@ -14,7 +14,7 @@ const isActive = (history, path) => {
 
 const NavBar = ({ history }) => {
     return (
-        <div class="row mx-auto">
+        <div className="row mx-auto">
         <ul className="nav nav-tabs mainNavbar col-md-10">
             <li className="nav-item">
                 <Link className="nav-link" style={isActive(history, '/')} to="/">Home</Link>
@@ -34,7 +34,7 @@ const NavBar = ({ history }) => {
                 </Fragment>
             )}
         </ul>
-        <ul class="nav nav-tabs mainNavbar col-md-2 justify-content-end">
+        <ul className="nav nav-tabs mainNavbar col-md-2 justify-content-end">
             {!isAuthenticated() && (
                 <Fragment>
                 <li className="nav-item">
