@@ -179,7 +179,7 @@ exports.ocrScanPage = function(req, res, next){
         let pArr = fullTextAnnotation.text.split('\n');
         pageObj.rawTitle = pArr[0];
         pageObj.richTitle = pArr[0];
-        let xPos = 300;
+        let xPos = 400;
         let yPos = 225;
 
         for (let i=1; i<pArr.length; i++) {

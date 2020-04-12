@@ -44,6 +44,7 @@ const Signup = () => {
                 console.log(data);
                 let appendMsg = '';
                 if (data.length > 0 && data[0].msg) appendMsg = data[0].msg;
+                if (data.name === "MongoError") appendMsg = 'Username already exists.';
                 setValues({ ...values, 
                     error: "Account could not be created. " + appendMsg,
                     success: false
