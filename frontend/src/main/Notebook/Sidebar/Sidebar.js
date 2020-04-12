@@ -334,7 +334,7 @@ class Sidebar extends Component {
                             delete={this.onDeleteSubject}
                         />
                     </DragDropContext>
-                    <div className="divider"></div>
+                    <div className="dividerMain"></div>
                     {
                         this.state.activeSubject !== null ?
                             <DragDropContext
