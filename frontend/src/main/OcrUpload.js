@@ -24,26 +24,6 @@ const OcrUpload = () => {
         setValues({ ...values, error: false, [attr]: e.target.value });
     }
 
-    const changeHandlerNotebook = attr => e => {
-        console.log(e.target.value);
-        setValues({ ...values, error: false, notebook: e.target.value });
-        fetch(`${API}/user/${JSON.parse(localStorage.getItem('jwt')).user._id}/notebook/${notebook}/subject/`, {
-            method: "GET",
-            headers: {
-                Accept: 'application/json',
-                'Authorization': 'Bearer ' +  JSON.parse(localStorage.getItem('jwt')).token
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log("fetched subjects", data);
-            setValues({...values, subjects: data, subject: data[0]._id});
-        })
-        .catch(err => {
-            console.log(err);
-        })
-    }
-
     const getNotebooks = () => {
         console.log("HELLO");
         fetch(`${API}/user/${JSON.parse(localStorage.getItem('jwt')).user._id}/notebook/`, {
@@ -60,7 +40,7 @@ const OcrUpload = () => {
         })
         .catch(err => {
             console.log(err);
-            setValues({...values, error: "An error has occured."});
+            setValues({...values, error: "An error has occured while creating page. " + err.message});
         });
     }
 
@@ -68,6 +48,34 @@ const OcrUpload = () => {
         getNotebooks();
         console.log("here");
     }, []);
+
+    useEffect(() => {
+        if (notebook !== '') {
+            console.log('notebook value is now: ', notebook);
+            fetch(`${API}/user/${JSON.parse(localStorage.getItem('jwt')).user._id}/notebook/${notebook}/subject/`, {
+                method: "GET",
+                headers: {
+                    Accept: 'application/json',
+                    'Authorization': 'Bearer ' +  JSON.parse(localStorage.getItem('jwt')).token
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log("fetched subjects", data);
+                let newFirstSubj = '';
+                if (data.length > 0) newFirstSubj = data[0]._id;
+                setValues({...values, subjects: data, subject: newFirstSubj});
+                console.log('notebook value is now: ', notebook);
+            })
+            .catch(err => {
+                console.log(err);
+                setValues({ ...values, 
+                    error: "An error has occured fetching subjects. " + err.message,
+                    success: false
+                });
+            })
+        }
+    }, [notebook]);
 
     const submitOcr = (e) => {
         e.preventDefault();
@@ -86,31 +94,23 @@ const OcrUpload = () => {
         .then(res => res.json())
         .then(data => {
             console.log(data);
-            setValues({ ...values, 
-                        error: '',
-                        success: true
-                    });
-            // if (data.user) {
-            //     console.log("HERE");
-            //     setValues({ ...values, 
-            //         error: '',
-            //         password: '',
-            //         username: '',
-            //         success: true
-            //     });
-                
-            // } else {
-            //     console.log(data);
-            //     setValues({ ...values, 
-            //         error: "Account could not be created.",
-            //         success: false
-            //     });
-            // }
+            if (data.errors) {
+                setValues({ ...values, 
+                    error: "An error has occured while creating page. " + data.message,
+                    success: false
+                });
+            } else {
+                setValues({ ...values, 
+                    error: false,
+                    success: true
+                });
+            }
+            
         })
         .catch(err => {
             console.log(err);
             setValues({ ...values, 
-                error: err,
+                error: "An error has occured while creating page. " + err.message,
                 success: false
             });
 
@@ -124,7 +124,7 @@ const OcrUpload = () => {
                     <input type="file" className="form-control" onChange={changeHandlerFile('files')} />
                 </div>
                 <div className="form-group">
-                    <select className="form-control" onChange={changeHandlerNotebook('notebook')}>
+                    <select className="form-control" onChange={changeHandler('notebook')}>
                         {
                             notebooks.map((v, i) => (
                                 <option key={i} value={v._id}>{v.title}</option>
@@ -169,7 +169,7 @@ const OcrUpload = () => {
             desc="Upload your handwritten notes to convert them to typed text." 
             className="container-fluid col-md-8 offset-md-2"
         >
-            {/* {errorAlert()} */}
+            {errorAlert()}
             {successAlert()}
             {signForm()}
         </Format>
