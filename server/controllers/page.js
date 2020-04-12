@@ -195,7 +195,7 @@ exports.ocrScanPage = function(req, res, next){
         });
     })
     .catch(err => {
-        return res.status(400).json(err);
+        return res.status(500).json(err);
     });
     
     

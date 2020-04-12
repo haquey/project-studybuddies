@@ -15,12 +15,12 @@ exports.signup = function(req, res){
 exports.signin = function(req, res){
     let { username, password } = req.body;
     User.findOne({username}, function(err, user){
-        if (err) return res.json(err);
-        if (!user) return res.json({err: "User does not exist."});
+        if (err) return res.status(500).json(err);
+        if (!user) return res.status(404).json({err: "User does not exist."});
 
         user.comparePassword(password, function(err, match){
-            if (err) return res.json(err);
-            if (!match) return res.json({ err: 'Incorrect username and password.' });
+            if (err) return res.status(500).json(err);
+            if (!match) return res.status(401).json({ err: 'Incorrect username and password.' });
 
             let token = jwt.sign({_id: user._id}, process.env.SECRET_JWT);
             res.cookie('token', token, {expire: new Date() + 7777});
