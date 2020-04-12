@@ -42,8 +42,10 @@ const Signup = () => {
                 
             } else {
                 console.log(data);
+                let appendMsg = '';
+                if (data.length > 0 && data[0].msg) appendMsg = data[0].msg;
                 setValues({ ...values, 
-                    error: "Account could not be created.",
+                    error: "Account could not be created. " + appendMsg,
                     success: false
                 });
             }
