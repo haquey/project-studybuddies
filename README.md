@@ -8,6 +8,11 @@
 
 Study buddy is an online collaborative notebook that allows students to upload both typed and handwritten notes that will convert them into text stored with various tags using image recognition/natural language processing. This lets students search through their notes with ease instead of flipping through several pages in a binder. Students will be able to share their uploaded files with others to use in their own notebooks if they desire. They will also be able to scrape web pages to summarize information and place it in their notebook.
 
+### Final Release Info
+- demo video: https://www.youtube.com/watch?v=eBVeE4ugIH8
+- website url: studdybuddy.xyz
+- API documentation is provided in the files
+
 ## Key Features for Beta Version:
 - Local search engine for the website’s repo
 - Handwritten text and typed text image recognition with automatically applied tags
