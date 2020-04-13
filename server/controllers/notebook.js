@@ -2,7 +2,7 @@ const Notebook = require('../models/notebook');
 
 exports.notebookById = function(req, res, next, id){
     Notebook.find({_id: id, ownerId: req.profile._id}, function(err, books){
-        if (err || books.length === 0) return res.status(400).json({err: "Notebook not found"});
+        if (err || books.length === 0) return res.status(404).json({err: "Notebook not found"});
         req.notebook = books[0];
         next();
     });

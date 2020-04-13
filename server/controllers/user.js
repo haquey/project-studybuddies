@@ -52,7 +52,7 @@ exports.isAuthenticated = function(req, res, next){
 
 exports.userById = function(req, res, next, id){
     User.findById(id).exec(function(err, user){
-        if (err || !user) return res.status(400).json({err: "User does not exist."});
+        if (err || !user) return res.status(404).json({err: "User does not exist."});
         req.profile = user;
         next();
     });
