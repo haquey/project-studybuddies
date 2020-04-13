@@ -24,7 +24,6 @@ const Signin = () => {
     const submitUser = (e) => {
         e.preventDefault();
         setValues({ ...values, error: false, loading: true});
-        console.log(username, password);
         fetch(`${API}/signin`, {
             method: "POST",
             headers: {
@@ -36,7 +35,6 @@ const Signin = () => {
         .then(res => res.json())
         .then(data => {
             if (data.user) {
-                console.log("HERE");
                 authenticate(data, () => {
                     setValues({ ...values, 
                         loading: false,
@@ -44,7 +42,6 @@ const Signin = () => {
                     });
                 })
             } else {
-                console.log(data);
                 setValues({ ...values, 
                     error: "Could not sign into account.",
                     loading: false

@@ -20,7 +20,6 @@ const Signup = () => {
     const submitUser = (e) => {
         e.preventDefault();
         setValues({ ...values, error: false});
-        console.log(username, password);
         fetch(`${API}/signup`, {
             method: "POST",
             headers: {
@@ -32,7 +31,6 @@ const Signup = () => {
         .then(res => res.json())
         .then(data => {
             if (data.user) {
-                console.log("HERE");
                 setValues({ ...values, 
                     error: '',
                     password: '',
