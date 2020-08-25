@@ -10,7 +10,7 @@ Study buddy is an online collaborative notebook that allows students to upload b
 
 ### Final Release Info
 - demo video: https://www.youtube.com/watch?v=eBVeE4ugIH8
-- website url: studdybuddy.xyz (currently offline)
+- website url: https://www.studdybuddy.xyz (currently offline)
 - API documentation is provided in the repository in the file APIDOC.md
 
 ## Key Features for Beta Version:
